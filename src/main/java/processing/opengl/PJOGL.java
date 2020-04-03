@@ -622,6 +622,7 @@ public class PJOGL extends PGL {
       setProperty(GLU.GLU_TESS_WINDING_RULE, rule);
     }
 
+    @Override
     public void setProperty(int property, int value) {
       GLU.gluTessProperty(tess, property, value);
     }
@@ -729,14 +730,17 @@ public class PJOGL extends PGL {
       iter = shp.getPathIterator(null);
     }
 
+    @Override
     public boolean isDone() {
       return iter.isDone();
     }
 
+    @Override
     public int currentSegment(float[] coords) {
       return iter.currentSegment(coords);
     }
 
+    @Override
     public void next() {
       iter.next();
     }
@@ -1120,6 +1124,9 @@ public class PJOGL extends PGL {
 
   @Override
   public String getString(int name) {
+    if (gl == null) {
+      throw new PGL.GraphicsNotInitializedException("Context not initalized.");
+    }
     return gl.glGetString(name);
   }
 

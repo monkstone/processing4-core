@@ -228,8 +228,8 @@ public class PImageAWT extends PImage {
     }
     try {
       if (saveImageFormats != null) {
-        for (int i = 0; i < saveImageFormats.length; i++) {
-          if (filename.endsWith("." + saveImageFormats[i])) {
+        for (String saveImageFormat : saveImageFormats) {
+          if (filename.endsWith("." + saveImageFormat)) {
             if (!saveImageIO(filename)) {
               System.err.println("Error while saving image.");
               return false;
@@ -239,7 +239,6 @@ public class PImageAWT extends PImage {
         }
       }
     } catch (IOException e) {
-      e.printStackTrace();
     }
     return false;
   }
