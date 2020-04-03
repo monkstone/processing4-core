@@ -5198,8 +5198,8 @@ public class PApplet implements PConstants {
    * parameter. Eg. a falloff factor of 0.75 means each octave will now have
    * 75% impact (25% less) of the previous lower octave. Any value between
    * 0.0 and 1.0 is valid, however note that values greater than 0.5 might
-   * result in greater than 1.0 values returned by <b>noise()</b>.<br
-   * />By changing these parameters, the signal created by the <b>noise()</b>
+   * result in greater than 1.0 values returned by <b>noise()</b>.
+   By changing these parameters, the signal created by the <b>noise()</b>
    * function can be adapted to fit very specific needs and characteristics.
    *
    * ( end auto-generated )
@@ -12337,11 +12337,11 @@ public class PApplet implements PConstants {
    * used. This font will be used in all subsequent calls to the
    * <b>text()</b> function. If no <b>size</b> parameter is input, the font
    * will appear at its original size (the size it was created at with the
-   * "Create Font..." tool) until it is changed with <b>textSize()</b>. <br
-   * />  Because fonts are usually bitmaped, you should create fonts at
+   * "Create Font..." tool) until it is changed with <b>textSize()</b>. 
+     Because fonts are usually bitmaped, you should create fonts at
    * the sizes that will be used most commonly. Using <b>textFont()</b>
-   * without the size parameter will result in the cleanest-looking text. <br
-   * /> With the default (JAVA2D) and PDF renderers, it's also possible
+   * without the size parameter will result in the cleanest-looking text. 
+    With the default (JAVA2D) and PDF renderers, it's also possible
    * to enable the use of native fonts via the command
    * <b>hint(ENABLE_NATIVE_FONTS)</b>. This will produce vector text in
    * JAVA2D sketches and PDF output in cases where the vector data is
@@ -13269,8 +13269,8 @@ public class PApplet implements PConstants {
    * reason, camera functions should be placed at the beginning of
    * <b>draw()</b> (so that transformations happen afterwards), and the
    * <b>camera()</b> function can be used after <b>beginCamera()</b> if you
-   * want to reset the camera before applying transformations.<br
-   * />This function sets the matrix mode to the camera matrix so calls such
+   * want to reset the camera before applying transformations.
+   This function sets the matrix mode to the camera matrix so calls such
    * as <b>translate()</b>, <b>rotate()</b>, applyMatrix() and resetMatrix()
    * affect the camera. <b>beginCamera()</b> should always be used with a
    * following <b>endCamera()</b> and pairs of <b>beginCamera()</b> and
@@ -14734,8 +14734,8 @@ public class PApplet implements PConstants {
    * is easy to use and undestand, but is slower than another technique. To
    * achieve the same results when working in <b>colorMode(RGB, 255)</b>, but
    * with greater speed, use the &gt;&gt; (right shift) operator with a bit
-   * mask. For example, the following two lines of code are equivalent:<br
-   * /><pre>float r1 = red(myColor);float r2 = myColor &gt;&gt; 16
+   * mask. For example, the following two lines of code are equivalent:
+   <pre>float r1 = red(myColor);float r2 = myColor &gt;&gt; 16
    * &amp; 0xFF;</pre>
    *
    * ( end auto-generated )
@@ -15141,8 +15141,8 @@ public class PApplet implements PConstants {
   /**
    * ( begin auto-generated from PImage_filter.xml )
    *
-   * Filters an image as defined by one of the following modes:<br
-   * />THRESHOLD - converts the image to black and white pixels depending if
+   * Filters an image as defined by one of the following modes:
+   THRESHOLD - converts the image to black and white pixels depending if
    * they are above or below the threshold defined by the level parameter.
    * The level must be between 0.0 (black) and 1.0(white). If no level is
    * specified, 0.5 is used.

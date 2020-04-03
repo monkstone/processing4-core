@@ -57,21 +57,25 @@ public class PSurfaceNone implements PSurface {
   }
 
 
+  @Override
   public PImage loadImage(String path, Object... args) {
     return ShimAWT.loadImage(sketch, path, args);
   }
 
 
+  @Override
   public void selectInput(String prompt, String callback, File file,
                           Object callbackObject) {
   }
 
 
+  @Override
   public void selectOutput(String prompt, String callback, File file,
                            Object callbackObject) {
   }
 
 
+  @Override
   public void selectFolder(String prompt, String callback, File file,
                            Object callbackObject) {
   }
@@ -97,6 +101,7 @@ public class PSurfaceNone implements PSurface {
   }
 
 
+  @Override
   public Object getNative() {
     return null;
   }
@@ -199,18 +204,23 @@ public class PSurfaceNone implements PSurface {
 //    // TODO Auto-generated method stub
 //  }
 
+  @Override
   public void setCursor(int kind) { }
 
+  @Override
   public void setCursor(PImage image, int hotspotX, int hotspotY) { }
 
+  @Override
   public void showCursor() { }
 
+  @Override
   public void hideCursor() { }
 
 
   //
 
 
+  @Override
   public boolean openLink(String url) {
     return false;
   }
@@ -224,6 +234,7 @@ public class PSurfaceNone implements PSurface {
   }
 
 
+  @Override
   public void startThread() {
     if (thread == null) {
       thread = createThread();
@@ -235,6 +246,7 @@ public class PSurfaceNone implements PSurface {
   }
 
 
+  @Override
   public boolean stopThread() {
     if (thread == null) {
       return false;
@@ -244,12 +256,14 @@ public class PSurfaceNone implements PSurface {
   }
 
 
+  @Override
   public boolean isStopped() {
     return thread == null || !thread.isAlive();
   }
 
 
   // sets a flag to pause the thread when ready
+  @Override
   public void pauseThread() {
     PApplet.debug("PApplet.run() paused, calling object wait...");
     paused = true;
@@ -272,6 +286,7 @@ public class PSurfaceNone implements PSurface {
   }
 
 
+  @Override
   public void resumeThread() {
     paused = false;
     synchronized (pauseObject) {

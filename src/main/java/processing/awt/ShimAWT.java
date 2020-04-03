@@ -25,6 +25,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 // used by desktopFile() method
 import javax.swing.filechooser.FileSystemView;
@@ -53,10 +54,10 @@ public class ShimAWT implements PConstants {
   */
   static private ShimAWT instance;
 
-  private GraphicsDevice[] displayDevices;
+  private final GraphicsDevice[] displayDevices;
 
-  private int displayWidth;
-  private int displayHeight;
+  private final int displayWidth;
+  private final int displayHeight;
 
 
   /** Only needed for display functions */
@@ -183,7 +184,6 @@ public class ShimAWT implements PConstants {
         return image;
 
       } catch (IOException e) {
-        e.printStackTrace();
         return null;
       }
     }
@@ -247,15 +247,15 @@ public class ShimAWT implements PConstants {
       }
     } catch (Exception e) {
       // show error, but move on to the stuff below, see if it'll work
-      e.printStackTrace();
+
     }
 
     if (loadImageFormats == null) {
       loadImageFormats = ImageIO.getReaderFormatNames();
     }
     if (loadImageFormats != null) {
-      for (int i = 0; i < loadImageFormats.length; i++) {
-        if (extension.equals(loadImageFormats[i])) {
+      for (String loadImageFormat : loadImageFormats) {
+        if (extension.equals(loadImageFormat)) {
           return loadImageIO(sketch, filename);
         }
       }
@@ -301,8 +301,7 @@ public class ShimAWT implements PConstants {
       // return the image
       return outgoing;
 
-    } catch (Exception e) {
-      e.printStackTrace();
+    } catch (IOException e) {
       return null;
     }
   }
@@ -554,7 +553,7 @@ public class ShimAWT implements PConstants {
         // Which also is not scaled properly with HiDPI interfaces.
         try {
           UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) { }
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) { }
       }
       lookAndFeelCheck = true;
     }
@@ -574,10 +573,7 @@ public class ShimAWT implements PConstants {
         Desktop.getDesktop().browse(new URI(url));
         return true;
       }
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (URISyntaxException e) {
-      e.printStackTrace();
+    } catch (IOException | URISyntaxException e) {
     }
     return false;
   }

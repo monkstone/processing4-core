@@ -1072,8 +1072,8 @@ public class PImage implements PConstants, Cloneable {
   /**
    * ( begin auto-generated from PImage_filter.xml )
    *
-   * Filters an image as defined by one of the following modes:<br
-   * />THRESHOLD - converts the image to black and white pixels depending if
+   * Filters an image as defined by one of the following modes:
+   THRESHOLD - converts the image to black and white pixels depending if
    * they are above or below the threshold defined by the level parameter.
    * The level must be between 0.0 (black) and 1.0(white). If no level is
    * specified, 0.5 is used.

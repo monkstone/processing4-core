@@ -43,6 +43,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.*;
 import java.io.File;
 import java.lang.management.ManagementFactory;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
@@ -635,8 +636,9 @@ public class PSurfaceAWT extends PSurfaceNone {
         Method method =
           thinkDifferent.getMethod("setIconImage", Image.class);
         method.invoke(null, awtImage);
-      } catch (Exception e) {
-        e.printStackTrace();  // That's unfortunate
+      } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
+        // That's unfortunate
+        
       }
     }
   }
@@ -693,8 +695,9 @@ public class PSurfaceAWT extends PSurfaceNone {
           Method method =
             thinkDifferent.getMethod("setIconImage", Image.class);
           method.invoke(null, Toolkit.getDefaultToolkit().getImage(url));
-        } catch (Exception e) {
-          e.printStackTrace();  // That's unfortunate
+        } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
+          // That's unfortunate
+          
         }
       }
     }
@@ -709,12 +712,8 @@ public class PSurfaceAWT extends PSurfaceNone {
     //      the app has an icns file specified already. Help?
     List<String> jvmArgs =
       ManagementFactory.getRuntimeMXBean().getInputArguments();
-    for (String arg : jvmArgs) {
-      if (arg.startsWith("-Xdock:icon")) {
-        return true;  // dock image already set
-      }
-    }
-    return false;
+    // dock image already set
+    return jvmArgs.stream().anyMatch((arg) -> (arg.startsWith("-Xdock:icon")));
   }
 
 
@@ -1147,27 +1146,21 @@ public class PSurfaceAWT extends PSurfaceNone {
    * in cases where frame.setResizable(true) is called.
    */
   private void setupFrameResizeListener() {
-    frame.addWindowStateListener(new WindowStateListener() {
-      @Override
-      // Detecting when the frame is resized in order to handle the frame
-      // maximization bug in OSX:
-      // http://bugs.java.com/bugdatabase/view_bug.do?bug_id=8036935
-      public void windowStateChanged(WindowEvent e) {
-        // This seems to be firing when dragging the window on OS X
+    frame.addWindowStateListener((WindowEvent e) -> {
+      // This seems to be firing when dragging the window on OS X
+      // https://github.com/processing/processing/issues/3092
+      if (Frame.MAXIMIZED_BOTH == e.getNewState()) {
+        // Supposedly, sending the frame to back and then front is a
+        // workaround for this bug:
+        // http://stackoverflow.com/a/23897602
+        // but is not working for me...
+        //frame.toBack();
+        //frame.toFront();
+        // Packing the frame works, but that causes the window to collapse
+        // on OS X when the window is dragged. Changing to addNotify() for
         // https://github.com/processing/processing/issues/3092
-        if (Frame.MAXIMIZED_BOTH == e.getNewState()) {
-          // Supposedly, sending the frame to back and then front is a
-          // workaround for this bug:
-          // http://stackoverflow.com/a/23897602
-          // but is not working for me...
-          //frame.toBack();
-          //frame.toFront();
-          // Packing the frame works, but that causes the window to collapse
-          // on OS X when the window is dragged. Changing to addNotify() for
-          // https://github.com/processing/processing/issues/3092
-          //frame.pack();
-          frame.addNotify();
-        }
+        //frame.pack();
+        frame.addNotify();
       }
     });
 
@@ -1381,22 +1374,27 @@ public class PSurfaceAWT extends PSurfaceNone {
 
     canvas.addMouseListener(new MouseListener() {
 
+      @Override
       public void mousePressed(java.awt.event.MouseEvent e) {
         nativeMouseEvent(e);
       }
 
+      @Override
       public void mouseReleased(java.awt.event.MouseEvent e) {
         nativeMouseEvent(e);
       }
 
+      @Override
       public void mouseClicked(java.awt.event.MouseEvent e) {
         nativeMouseEvent(e);
       }
 
+      @Override
       public void mouseEntered(java.awt.event.MouseEvent e) {
         nativeMouseEvent(e);
       }
 
+      @Override
       public void mouseExited(java.awt.event.MouseEvent e) {
         nativeMouseEvent(e);
       }
@@ -1404,34 +1402,36 @@ public class PSurfaceAWT extends PSurfaceNone {
 
     canvas.addMouseMotionListener(new MouseMotionListener() {
 
+      @Override
       public void mouseDragged(java.awt.event.MouseEvent e) {
         nativeMouseEvent(e);
       }
 
+      @Override
       public void mouseMoved(java.awt.event.MouseEvent e) {
         nativeMouseEvent(e);
       }
     });
 
-    canvas.addMouseWheelListener(new MouseWheelListener() {
-
-      public void mouseWheelMoved(MouseWheelEvent e) {
-        nativeMouseEvent(e);
-      }
+    canvas.addMouseWheelListener((MouseWheelEvent e) -> {
+      nativeMouseEvent(e);
     });
 
     canvas.addKeyListener(new KeyListener() {
 
+      @Override
       public void keyPressed(java.awt.event.KeyEvent e) {
         nativeKeyEvent(e);
       }
 
 
+      @Override
       public void keyReleased(java.awt.event.KeyEvent e) {
         nativeKeyEvent(e);
       }
 
 
+      @Override
       public void keyTyped(java.awt.event.KeyEvent e) {
         nativeKeyEvent(e);
       }
@@ -1439,11 +1439,13 @@ public class PSurfaceAWT extends PSurfaceNone {
 
     canvas.addFocusListener(new FocusListener() {
 
+      @Override
       public void focusGained(FocusEvent e) {
         sketch.focused = true;
         sketch.focusGained();
       }
 
+      @Override
       public void focusLost(FocusEvent e) {
         sketch.focused = false;
         sketch.focusLost();
