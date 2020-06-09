@@ -24,24 +24,12 @@
 
 package processing.core;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
-import java.awt.GraphicsEnvironment;
-import java.awt.RenderingHints;
-import java.awt.Shape;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.geom.PathIterator;
-import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.awt.image.*;
+import java.io.*;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -349,7 +337,6 @@ public class PFont implements PConstants {
   }
 
   /**
-   * @throws java.io.IOException
    * @nowebref
    * @param input InputStream
    */

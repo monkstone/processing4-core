@@ -202,10 +202,8 @@ public class PImageAWT extends PImage {
       prevH = h;
       outgoing = scratchImage;
     } while (w != targetWidth || h != targetHeight);
-
-    if (g2 != null) {
       g2.dispose();
-    }
+
 
     // If we used a scratch buffer that is larger than our target size,
     // create an image of the right size and copy the results into it
@@ -228,15 +226,15 @@ public class PImageAWT extends PImage {
     }
     try {
       if (saveImageFormats != null) {
-        for (String saveImageFormat : saveImageFormats) {
-          if (filename.endsWith("." + saveImageFormat)) {
-            if (!saveImageIO(filename)) {
-              System.err.println("Error while saving image.");
-              return false;
-            }
-            return true;
+          for (String saveImageFormat : saveImageFormats) {
+              if (filename.endsWith("." + saveImageFormat)) {
+                  if (!saveImageIO(filename)) {
+                      System.err.println("Error while saving image.");
+                      return false;
+                  }
+                  return true;
+              }
           }
-        }
       }
     } catch (IOException e) {
     }

@@ -23,7 +23,9 @@
  */
 
 package processing.core;
+
 import java.io.Serializable;
+
 
 /**
  * ( begin auto-generated from PVector.xml )

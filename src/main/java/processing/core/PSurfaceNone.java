@@ -101,7 +101,6 @@ public class PSurfaceNone implements PSurface {
   }
 
 
-  @Override
   public Object getNative() {
     return null;
   }
@@ -204,16 +203,12 @@ public class PSurfaceNone implements PSurface {
 //    // TODO Auto-generated method stub
 //  }
 
-  @Override
   public void setCursor(int kind) { }
 
-  @Override
   public void setCursor(PImage image, int hotspotX, int hotspotY) { }
 
-  @Override
   public void showCursor() { }
 
-  @Override
   public void hideCursor() { }
 
 
@@ -234,7 +229,6 @@ public class PSurfaceNone implements PSurface {
   }
 
 
-  @Override
   public void startThread() {
     if (thread == null) {
       thread = createThread();
@@ -246,7 +240,6 @@ public class PSurfaceNone implements PSurface {
   }
 
 
-  @Override
   public boolean stopThread() {
     if (thread == null) {
       return false;
@@ -256,14 +249,12 @@ public class PSurfaceNone implements PSurface {
   }
 
 
-  @Override
   public boolean isStopped() {
     return thread == null || !thread.isAlive();
   }
 
 
   // sets a flag to pause the thread when ready
-  @Override
   public void pauseThread() {
     PApplet.debug("PApplet.run() paused, calling object wait...");
     paused = true;
@@ -295,6 +286,7 @@ public class PSurfaceNone implements PSurface {
   }
 
 
+  @Override
   public void setFrameRate(float fps) {
     frameRateTarget = fps;
     frameRatePeriod = (long) (1000000000.0 / frameRateTarget);

@@ -636,9 +636,8 @@ public class PSurfaceAWT extends PSurfaceNone {
         Method method =
           thinkDifferent.getMethod("setIconImage", Image.class);
         method.invoke(null, awtImage);
-      } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
-        // That's unfortunate
-        
+      } catch (Exception e) {
+        e.printStackTrace();  // That's unfortunate
       }
     }
   }
@@ -696,8 +695,8 @@ public class PSurfaceAWT extends PSurfaceNone {
             thinkDifferent.getMethod("setIconImage", Image.class);
           method.invoke(null, Toolkit.getDefaultToolkit().getImage(url));
         } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
-          // That's unfortunate
-          
+            // That's unfortunate
+            
         }
       }
     }
@@ -712,8 +711,12 @@ public class PSurfaceAWT extends PSurfaceNone {
     //      the app has an icns file specified already. Help?
     List<String> jvmArgs =
       ManagementFactory.getRuntimeMXBean().getInputArguments();
-    // dock image already set
-    return jvmArgs.stream().anyMatch((arg) -> (arg.startsWith("-Xdock:icon")));
+    for (String arg : jvmArgs) {
+      if (arg.startsWith("-Xdock:icon")) {
+        return true;  // dock image already set
+      }
+    }
+    return false;
   }
 
 
@@ -1147,21 +1150,21 @@ public class PSurfaceAWT extends PSurfaceNone {
    */
   private void setupFrameResizeListener() {
     frame.addWindowStateListener((WindowEvent e) -> {
-      // This seems to be firing when dragging the window on OS X
-      // https://github.com/processing/processing/issues/3092
-      if (Frame.MAXIMIZED_BOTH == e.getNewState()) {
-        // Supposedly, sending the frame to back and then front is a
-        // workaround for this bug:
-        // http://stackoverflow.com/a/23897602
-        // but is not working for me...
-        //frame.toBack();
-        //frame.toFront();
-        // Packing the frame works, but that causes the window to collapse
-        // on OS X when the window is dragged. Changing to addNotify() for
+        // This seems to be firing when dragging the window on OS X
         // https://github.com/processing/processing/issues/3092
-        //frame.pack();
-        frame.addNotify();
-      }
+        if (Frame.MAXIMIZED_BOTH == e.getNewState()) {
+            // Supposedly, sending the frame to back and then front is a
+            // workaround for this bug:
+            // http://stackoverflow.com/a/23897602
+            // but is not working for me...
+            //frame.toBack();
+            //frame.toFront();
+            // Packing the frame works, but that causes the window to collapse
+            // on OS X when the window is dragged. Changing to addNotify() for
+            // https://github.com/processing/processing/issues/3092
+            //frame.pack();
+            frame.addNotify();
+        }
     });
 
     frame.addComponentListener(new ComponentAdapter() {
@@ -1389,7 +1392,6 @@ public class PSurfaceAWT extends PSurfaceNone {
         nativeMouseEvent(e);
       }
 
-      @Override
       public void mouseEntered(java.awt.event.MouseEvent e) {
         nativeMouseEvent(e);
       }
@@ -1414,7 +1416,7 @@ public class PSurfaceAWT extends PSurfaceNone {
     });
 
     canvas.addMouseWheelListener((MouseWheelEvent e) -> {
-      nativeMouseEvent(e);
+        nativeMouseEvent(e);
     });
 
     canvas.addKeyListener(new KeyListener() {

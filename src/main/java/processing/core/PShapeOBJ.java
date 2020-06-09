@@ -53,17 +53,17 @@ public class PShapeOBJ extends PShape {
                       ArrayList<PVector> normals,
                       ArrayList<PVector> texcoords) {
     family = GEOMETRY;
-    switch (face.vertIdx.size()) {
-      case 3:
-        kind = TRIANGLES;
-        break;
-      case 4:
-        kind = QUADS;
-        break;
-      default:
-        kind = POLYGON;
-        break;
-    }
+      switch (face.vertIdx.size()) {
+          case 3:
+              kind = TRIANGLES;
+              break;
+          case 4:
+              kind = QUADS;
+              break;
+          default:
+              kind = POLYGON;
+              break;
+      }
 
     stroke = false;
     fill = true;
@@ -200,122 +200,122 @@ public class PShapeOBJ extends PShape {
         String[] parts = line.split("\\s+");
         // if not a blank line, process the line.
         if (parts.length > 0) {
-          switch (parts[0]) {
-            case "v":
-              {
-                // vertex
-                PVector tempv = new PVector(Float.parseFloat(parts[1]),
-                  Float.parseFloat(parts[2]),
-                  Float.parseFloat(parts[3]));
-                coords.add(tempv);
-                readv = true;
-                break;
-              }
-            case "vn":
-              // normal
-              PVector tempn = new PVector(Float.parseFloat(parts[1]),
-                Float.parseFloat(parts[2]),
-                Float.parseFloat(parts[3]));
-              normals.add(tempn);
-              readvn = true;
-              break;
-            case "vt":
-              {
-                // uv, inverting v to take into account Processing's inverted Y axis
-                // with respect to OpenGL.
-                PVector tempv = new PVector(Float.parseFloat(parts[1]),
-                  1 - Float.parseFloat(parts[2]));
-                texcoords.add(tempv);
-                readvt = true;
-                break;
-              }
-          // Object name is ignored, for now.
-            case "o":
-              break;
-            case "mtllib":
-              if (parts[1] != null) {
-                String fn = parts[1];
-                if (!fn.contains(File.separator) && !path.equals("")) {
-                  // Relative file name, adding the base path.
-                  fn = path + File.separator + fn;
-                }
-                BufferedReader mreader = parent.createReader(fn);
-                if (mreader != null) {
-                  parseMTL(parent, fn, path, mreader, materials, mtlTable);
-                  mreader.close();
-                }
-              } break;
-            case "g":
-              gname = 1 < parts.length ? parts[1] : "";
-              break;
-            case "usemtl":
-              // Getting index of current active material (will be applied on
-              // all subsequent faces).
-              if (parts[1] != null) {
-                String mtlname = parts[1];
-                if (mtlTable.containsKey(mtlname)) {
-                  Integer tempInt = mtlTable.get(mtlname);
-                  mtlIdxCur = tempInt;
-                } else {
-                  mtlIdxCur = -1;
-                }
-              } break;
-            case "f":
-              // Face setting
-              OBJFace face = new OBJFace();
-              face.matIdx = mtlIdxCur;
-              face.name = gname;
-              for (int i = 1; i < parts.length; i++) {
-                String seg = parts[i];
-                
-                if (seg.indexOf("/") > 0) {
-                  String[] forder = seg.split("/");
-                  
-                  if (forder.length > 2) {
-                    // Getting vertex and texture and normal indexes.
-                    if (forder[0].length() > 0 && readv) {
-                      face.vertIdx.add(Integer.valueOf(forder[0]));
+            switch (parts[0]) {
+                case "v":
+                    {
+                        // vertex
+                        PVector tempv = new PVector(Float.valueOf(parts[1]),
+                                Float.valueOf(parts[2]),
+                                Float.valueOf(parts[3]));
+                        coords.add(tempv);
+                        readv = true;
+                        break;
                     }
-                    
-                    if (forder[1].length() > 0 && readvt) {
-                      face.texIdx.add(Integer.valueOf(forder[1]));
+                case "vn":
+                    // normal
+                    PVector tempn = new PVector(Float.valueOf(parts[1]),
+                            Float.valueOf(parts[2]),
+                            Float.valueOf(parts[3]));
+                    normals.add(tempn);
+                    readvn = true;
+                    break;
+                case "vt":
+                    {
+                        // uv, inverting v to take into account Processing's inverted Y axis
+                        // with respect to OpenGL.
+                        PVector tempv = new PVector(Float.valueOf(parts[1]),
+                                1 - Float.valueOf(parts[2]));
+                        texcoords.add(tempv);
+                        readvt = true;
+                        break;
                     }
-
-                    if (forder[2].length() > 0 && readvn) {
-                      face.normIdx.add(Integer.valueOf(forder[2]));
-                    }
-                  } else if (forder.length > 1) {
-                    // Getting vertex and texture/normal indexes.
-                    if (forder[0].length() > 0 && readv) {
-                      face.vertIdx.add(Integer.valueOf(forder[0]));
-                    }
-                    
-                    if (forder[1].length() > 0) {
-                      if (readvt) {
-                        face.texIdx.add(Integer.valueOf(forder[1]));
-                      } else  if (readvn) {
-                        face.normIdx.add(Integer.valueOf(forder[1]));
-                      }
-                      
-                    }
-                    
-                  } else if (forder.length > 0) {
-                    // Getting vertex index only.
-                    if (forder[0].length() > 0 && readv) {
-                      face.vertIdx.add(Integer.valueOf(forder[0]));
-                    }
-                  }
-                } else {
-                  // Getting vertex index only.
-                  if (seg.length() > 0 && readv) {
-                    face.vertIdx.add(Integer.valueOf(seg));
-                  }
-                }
-              } faces.add(face);
-              break;
-            default:
-              break;
-          }
+            // Object name is ignored, for now.
+                case "o":
+                    break;
+                case "mtllib":
+                    if (parts[1] != null) {
+                        String fn = parts[1];
+                        if (!fn.contains(File.separator) && !path.equals("")) {
+                            // Relative file name, adding the base path.
+                            fn = path + File.separator + fn;
+                        }
+                        BufferedReader mreader = parent.createReader(fn);
+                        if (mreader != null) {
+                            parseMTL(parent, fn, path, mreader, materials, mtlTable);
+                            mreader.close();
+                        }
+                    }       break;
+                case "g":
+                    gname = 1 < parts.length ? parts[1] : "";
+                    break;
+                case "usemtl":
+                    // Getting index of current active material (will be applied on
+                    // all subsequent faces).
+                    if (parts[1] != null) {
+                        String mtlname = parts[1];
+                        if (mtlTable.containsKey(mtlname)) {
+                            Integer tempInt = mtlTable.get(mtlname);
+                            mtlIdxCur = tempInt;
+                        } else {
+                            mtlIdxCur = -1;
+                        }
+                    }       break;
+                case "f":
+                    // Face setting
+                    OBJFace face = new OBJFace();
+                    face.matIdx = mtlIdxCur;
+                    face.name = gname;
+                    for (int i = 1; i < parts.length; i++) {
+                        String seg = parts[i];
+                        
+                        if (seg.indexOf("/") > 0) {
+                            String[] forder = seg.split("/");
+                            
+                            if (forder.length > 2) {
+                                // Getting vertex and texture and normal indexes.
+                                if (forder[0].length() > 0 && readv) {
+                                    face.vertIdx.add(Integer.valueOf(forder[0]));
+                                }
+                                
+                                if (forder[1].length() > 0 && readvt) {
+                                    face.texIdx.add(Integer.valueOf(forder[1]));
+                                }
+                                
+                                if (forder[2].length() > 0 && readvn) {
+                                    face.normIdx.add(Integer.valueOf(forder[2]));
+                                }
+                            } else if (forder.length > 1) {
+                                // Getting vertex and texture/normal indexes.
+                                if (forder[0].length() > 0 && readv) {
+                                    face.vertIdx.add(Integer.valueOf(forder[0]));
+                                }
+                                
+                                if (forder[1].length() > 0) {
+                                    if (readvt) {
+                                        face.texIdx.add(Integer.valueOf(forder[1]));
+                                    } else  if (readvn) {
+                                        face.normIdx.add(Integer.valueOf(forder[1]));
+                                    }
+                                    
+                                }
+                                
+                            } else if (forder.length > 0) {
+                                // Getting vertex index only.
+                                if (forder[0].length() > 0 && readv) {
+                                    face.vertIdx.add(Integer.valueOf(forder[0]));
+                                }
+                            }
+                        } else {
+                            // Getting vertex index only.
+                            if (seg.length() > 0 && readv) {
+                                face.vertIdx.add(Integer.valueOf(seg));
+                            }
+                        }
+                    }       faces.add(face);
+                    break;
+                default:
+                    break;
+            }
         }
       }
 
@@ -372,19 +372,19 @@ public class PShapeOBJ extends PShape {
               }
             } else if (parts[0].equals("Ka") && parts.length > 3) {
               // The ambient color of the material
-              currentMtl.ka.x = Float.parseFloat(parts[1]);
-              currentMtl.ka.y = Float.parseFloat(parts[2]);
-              currentMtl.ka.z = Float.parseFloat(parts[3]);
+              currentMtl.ka.x = Float.valueOf(parts[1]);
+              currentMtl.ka.y = Float.valueOf(parts[2]);
+              currentMtl.ka.z = Float.valueOf(parts[3]);
             } else if (parts[0].equals("Kd") && parts.length > 3) {
               // The diffuse color of the material
-              currentMtl.kd.x = Float.parseFloat(parts[1]);
-              currentMtl.kd.y = Float.parseFloat(parts[2]);
-              currentMtl.kd.z = Float.parseFloat(parts[3]);
+              currentMtl.kd.x = Float.valueOf(parts[1]);
+              currentMtl.kd.y = Float.valueOf(parts[2]);
+              currentMtl.kd.z = Float.valueOf(parts[3]);
             } else if (parts[0].equals("Ks") && parts.length > 3) {
               // The specular color weighted by the specular coefficient
-              currentMtl.ks.x = Float.parseFloat(parts[1]);
-              currentMtl.ks.y = Float.parseFloat(parts[2]);
-              currentMtl.ks.z = Float.parseFloat(parts[3]);
+              currentMtl.ks.x = Float.valueOf(parts[1]);
+              currentMtl.ks.y = Float.valueOf(parts[2]);
+              currentMtl.ks.z = Float.valueOf(parts[3]);
             } else if ((parts[0].equals("d") ||
                         parts[0].equals("Tr")) && parts.length > 1) {
               // Reading the alpha transparency.

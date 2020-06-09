@@ -246,7 +246,7 @@ public class ShimAWT implements PConstants {
         }
       }
     } catch (Exception e) {
-      // show error, but move on to the stuff below, see if it'll work
+        // show error, but move on to the stuff below, see if it'll work
 
     }
 
@@ -254,11 +254,11 @@ public class ShimAWT implements PConstants {
       loadImageFormats = ImageIO.getReaderFormatNames();
     }
     if (loadImageFormats != null) {
-      for (String loadImageFormat : loadImageFormats) {
-        if (extension.equals(loadImageFormat)) {
-          return loadImageIO(sketch, filename);
+        for (String loadImageFormat : loadImageFormats) {
+            if (extension.equals(loadImageFormat)) {
+                return loadImageIO(sketch, filename);
+            }
         }
-      }
     }
 
     // failed, could not load image after all those attempts

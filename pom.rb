@@ -2,7 +2,7 @@
 
 project 'processing-core', 'https://github.com/monkstone/processing4-core' do
   model_version '4.0.0'
-  id 'org.processing:core:4.0'
+  id 'org.processing:core:4.0.0'
   packaging 'jar'
 
   description 'Jar for ruby-processing projects'
@@ -36,15 +36,15 @@ project 'processing-core', 'https://github.com/monkstone/processing4-core' do
     plugin(:compiler, '3.8.1',
            'release' => '11')
     plugin(:javadoc, '2.10.4',
-           'detectOfflineLinks' => 'false',
-           'links' => ['${processing.api}',
-                       '${jruby.api}'])
-    plugin(:jar, '3.1.1',
-           'archive' => {
-             'manifestEntries' => {
-               'Class-Path' => 'gluegen-rt.jar jog-all.jar'
-             }
-           })
+             'detectOfflineLinks' => 'false',
+             'links' => ['${processing.api}',
+               '${jruby.api}'])
+               plugin( :jar, '3.2.0',
+                 'archive' => {
+                   'manifestEntries' => {
+                     'Automatic-Module-Name' =>  'org.processing.core'
+                   }
+                   } )
     plugin :jdeps, '3.1.2' do
       execute_goals 'jdkinternals', 'test-jdkinternals'
     end
@@ -60,7 +60,6 @@ project 'processing-core', 'https://github.com/monkstone/processing4-core' do
     resource do
       directory '${source.directory}/main/resources'
       includes '**/*.png', '*.txt'
-      excludes
     end
   end
 end

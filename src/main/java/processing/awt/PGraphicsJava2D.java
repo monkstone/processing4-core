@@ -995,12 +995,9 @@ public class PGraphicsJava2D extends PGraphics {
   /**
    * ( begin auto-generated from blendMode.xml )
    *
-   * This is a new reference entry for Processing 2.0. It will be updated shortly.
-   *
-   * ( end auto-generated )
+   * This is a new reference entry for Processing 2.0.It will be updated shortly. ( end auto-generated )
    *
    * @webref Rendering
-   * @param mode the blending mode to use
    */
   @Override
   protected void blendModeImpl() {
@@ -1295,22 +1292,22 @@ public class PGraphicsJava2D extends PGraphics {
     int fillMode = Arc2D.PIE;
     int strokeMode = Arc2D.OPEN;
 
-    switch (mode) {
-      case OPEN:
-        fillMode = Arc2D.OPEN;
-        //strokeMode = Arc2D.OPEN;
-        break;
-      case PIE:
-        //fillMode = Arc2D.PIE;
-        strokeMode = Arc2D.PIE;
-        break;
-      case CHORD:
-        fillMode = Arc2D.CHORD;
-        strokeMode = Arc2D.CHORD;
-        break;
-      default:
-        break;
-    }
+      switch (mode) {
+          case OPEN:
+              fillMode = Arc2D.OPEN;
+              //strokeMode = Arc2D.OPEN;
+              break;
+          case PIE:
+              //fillMode = Arc2D.PIE;
+              strokeMode = Arc2D.PIE;
+              break;
+          case CHORD:
+              fillMode = Arc2D.CHORD;
+              strokeMode = Arc2D.CHORD;
+              break;
+          default:
+              break;
+      }
 
     if (fill) {
       //System.out.println("filla");
@@ -1743,42 +1740,42 @@ public class PGraphicsJava2D extends PGraphics {
           } else {
             int index = 0;
             for (int y = 0; y < source.pixelHeight; y++) {
-              switch (source.format) {
-                case RGB:
-                  int alpha = tintColor & 0xFF000000;
-                  for (int x = 0; x < source.pixelWidth; x++) {
-                    int argb1 = source.pixels[index++];
-                    int r1 = (argb1 >> 16) & 0xff;
-                    int g1 = (argb1 >> 8) & 0xff;
-                    int b1 = (argb1) & 0xff;
-                    tintedTemp[x] = alpha |
-                      (((r2 * r1) & 0xff00) << 8) |
-                      ((g2 * g1) & 0xff00) |
-                      (((b2 * b1) & 0xff00) >> 8);
-                  } break;
-                case ARGB:
-                  for (int x = 0; x < source.pixelWidth; x++) {
-                    int argb1 = source.pixels[index++];
-                    int a1 = (argb1 >> 24) & 0xff;
-                    int r1 = (argb1 >> 16) & 0xff;
-                    int g1 = (argb1 >> 8) & 0xff;
-                    int b1 = (argb1) & 0xff;
-                    tintedTemp[x] =
-                      (((a2 * a1) & 0xff00) << 16) |
-                      (((r2 * r1) & 0xff00) << 8) |
-                      ((g2 * g1) & 0xff00) |
-                      (((b2 * b1) & 0xff00) >> 8);
-                  } break;
-                case ALPHA:
-                  int lower = tintColor & 0xFFFFFF;
-                  for (int x = 0; x < source.pixelWidth; x++) {
-                    int a1 = source.pixels[index++];
-                    tintedTemp[x] =
-                      (((a2 * a1) & 0xff00) << 16) | lower;
-                  } break;
-                default:
-                  break;
-              }
+                switch (source.format) {
+                    case RGB:
+                        int alpha = tintColor & 0xFF000000;
+                        for (int x = 0; x < source.pixelWidth; x++) {
+                            int argb1 = source.pixels[index++];
+                            int r1 = (argb1 >> 16) & 0xff;
+                            int g1 = (argb1 >> 8) & 0xff;
+                            int b1 = (argb1) & 0xff;
+                            tintedTemp[x] = alpha |
+                                    (((r2 * r1) & 0xff00) << 8) |
+                                    ((g2 * g1) & 0xff00) |
+                                    (((b2 * b1) & 0xff00) >> 8);
+                        }       break;
+                    case ARGB:
+                        for (int x = 0; x < source.pixelWidth; x++) {
+                            int argb1 = source.pixels[index++];
+                            int a1 = (argb1 >> 24) & 0xff;
+                            int r1 = (argb1 >> 16) & 0xff;
+                            int g1 = (argb1 >> 8) & 0xff;
+                            int b1 = (argb1) & 0xff;
+                            tintedTemp[x] =
+                                    (((a2 * a1) & 0xff00) << 16) |
+                                    (((r2 * r1) & 0xff00) << 8) |
+                                    ((g2 * g1) & 0xff00) |
+                                    (((b2 * b1) & 0xff00) >> 8);
+                        }       break;
+                    case ALPHA:
+                        int lower = tintColor & 0xFFFFFF;
+                        for (int x = 0; x < source.pixelWidth; x++) {
+                            int a1 = source.pixels[index++];
+                            tintedTemp[x] =
+                                    (((a2 * a1) & 0xff00) << 16) | lower;
+                        }       break;
+                    default:
+                        break;
+                }
               wr.setDataElements(0, y, source.pixelWidth, 1, tintedTemp);
             }
           }

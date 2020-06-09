@@ -71,12 +71,13 @@ public interface PSurface {
   //
 
   /**
-   * Get the native window object associated with this drawing surface.
-   * For Java2D, this will be an AWT Frame object. For OpenGL, the window.
-   * The data returned here is subject to the whims of the renderer,
-   * and using this method means you're willing to deal with underlying
-   * implementation changes and that you won't throw a fit like a toddler
-   * if your code breaks sometime in the future.
+   * Get the native window object associated with this drawing surface.For Java2D, this will be an AWT Frame object.
+   * For OpenGL, the window.
+ The data returned here is subject to the whims of the renderer,
+ and using this method means you're willing to deal with underlying
+ implementation changes and that you won't throw a fit like a toddler
+ if your code breaks sometime in the future.
+     * @return 
    */
   public Object getNative();
 

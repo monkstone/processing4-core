@@ -195,16 +195,13 @@ public class PMatrix2D implements PMatrix {
 
   /**
    * Unavailable in 2D.
-   * @param angle
    * @throws IllegalArgumentException
    */
-  @Override
   public void rotateY(float angle) {
     throw new IllegalArgumentException("Cannot use rotateY() on a PMatrix2D.");
   }
 
 
-  @Override
   public void rotateZ(float angle) {
     rotate(angle);
   }
@@ -214,19 +211,16 @@ public class PMatrix2D implements PMatrix {
    * Unavailable in 2D.
    * @throws IllegalArgumentException
    */
-  @Override
   public void rotate(float angle, float v0, float v1, float v2) {
     throw new IllegalArgumentException("Cannot use this version of rotate() on a PMatrix2D.");
   }
 
 
-  @Override
   public void scale(float s) {
     scale(s, s);
   }
 
 
-  @Override
   public void scale(float sx, float sy) {
     m00 *= sx;  m01 *= sy;
     m10 *= sx;  m11 *= sy;
@@ -237,25 +231,21 @@ public class PMatrix2D implements PMatrix {
    * Unavailable in 2D.
    * @throws IllegalArgumentException
    */
-  @Override
   public void scale(float x, float y, float z) {
     throw new IllegalArgumentException("Cannot use this version of scale() on a PMatrix2D.");
   }
 
 
-  @Override
   public void shearX(float angle) {
     apply(1, 0, 1,  tan(angle), 0, 0);
   }
 
 
-  @Override
   public void shearY(float angle) {
     apply(1, 0, 1,  0, tan(angle), 0);
   }
 
 
-  @Override
   public void apply(PMatrix source) {
     if (source instanceof PMatrix2D) {
       apply((PMatrix2D) source);
@@ -468,7 +458,6 @@ public class PMatrix2D implements PMatrix {
   /**
    * @return the determinant of the matrix
    */
-  @Override
   public float determinant() {
     return m00 * m11 - m01 * m10;
   }
@@ -523,23 +512,23 @@ public class PMatrix2D implements PMatrix {
   //////////////////////////////////////////////////////////////
 
 
-  static private final float max(float a, float b) {
+  private static float max(float a, float b) {
     return (a > b) ? a : b;
   }
 
-  static private final float abs(float a) {
+  private static float abs(float a) {
     return (a < 0) ? -a : a;
   }
 
-  static private final float sin(float angle) {
+  private static float sin(float angle) {
     return (float)Math.sin(angle);
   }
 
-  static private final float cos(float angle) {
+  private static float cos(float angle) {
     return (float)Math.cos(angle);
   }
 
-  static private final float tan(float angle) {
+  private static float tan(float angle) {
     return (float)Math.tan(angle);
   }
 }

@@ -105,6 +105,7 @@ public final class PMatrix3D implements PMatrix /*, PConstants*/ {
    * Copies the matrix contents into a 16 entry float array.
    * If target is null (or not the correct size), a new array will be created.
    */
+  @Override
   public float[] get(float[] target) {
     if ((target == null) || (target.length != 16)) {
       target = new float[16];
@@ -133,6 +134,7 @@ public final class PMatrix3D implements PMatrix /*, PConstants*/ {
   }
 
 
+  @Override
   public void set(PMatrix matrix) {
     if (matrix instanceof PMatrix3D) {
       PMatrix3D src = (PMatrix3D) matrix;
@@ -150,6 +152,7 @@ public final class PMatrix3D implements PMatrix /*, PConstants*/ {
   }
 
 
+  @Override
   public void set(float[] source) {
     if (source.length == 6) {
       set(source[0], source[1], source[2],
@@ -179,6 +182,7 @@ public final class PMatrix3D implements PMatrix /*, PConstants*/ {
   }
 
 
+  @Override
   public void set(float m00, float m01, float m02,
                   float m10, float m11, float m12) {
     set(m00, m01, 0, m02,
@@ -188,6 +192,7 @@ public final class PMatrix3D implements PMatrix /*, PConstants*/ {
   }
 
 
+  @Override
   public void set(float m00, float m01, float m02, float m03,
                   float m10, float m11, float m12, float m13,
                   float m20, float m21, float m22, float m23,
@@ -199,6 +204,7 @@ public final class PMatrix3D implements PMatrix /*, PConstants*/ {
   }
 
 
+  @Override
   public void translate(float tx, float ty) {
     translate(tx, ty, 0);
   }
@@ -208,6 +214,7 @@ public final class PMatrix3D implements PMatrix /*, PConstants*/ {
 //  }
 
 
+  @Override
   public void translate(float tx, float ty, float tz) {
     m03 += tx*m00 + ty*m01 + tz*m02;
     m13 += tx*m10 + ty*m11 + tz*m12;
@@ -216,11 +223,13 @@ public final class PMatrix3D implements PMatrix /*, PConstants*/ {
   }
 
 
+  @Override
   public void rotate(float angle) {
     rotateZ(angle);
   }
 
 
+  @Override
   public void rotateX(float angle) {
     float c = cos(angle);
     float s = sin(angle);
@@ -271,18 +280,21 @@ public final class PMatrix3D implements PMatrix /*, PConstants*/ {
   }
 
 
+  @Override
   public void scale(float s) {
     //apply(s, 0, 0, 0,  0, s, 0, 0,  0, 0, s, 0,  0, 0, 0, 1);
     scale(s, s, s);
   }
 
 
+  @Override
   public void scale(float sx, float sy) {
     //apply(sx, 0, 0, 0,  0, sy, 0, 0,  0, 0, 1, 0,  0, 0, 0, 1);
     scale(sx, sy, 1);
   }
 
 
+  @Override
   public void scale(float x, float y, float z) {
     //apply(x, 0, 0, 0,  0, y, 0, 0,  0, 0, z, 0,  0, 0, 0, 1);
     m00 *= x;  m01 *= y;  m02 *= z;
@@ -292,6 +304,7 @@ public final class PMatrix3D implements PMatrix /*, PConstants*/ {
   }
 
 
+  @Override
   public void shearX(float angle) {
     float t = (float) Math.tan(angle);
     apply(1, t, 0, 0,
@@ -301,6 +314,7 @@ public final class PMatrix3D implements PMatrix /*, PConstants*/ {
   }
 
 
+  @Override
   public void shearY(float angle) {
     float t = (float) Math.tan(angle);
     apply(1, 0, 0, 0,
@@ -310,6 +324,7 @@ public final class PMatrix3D implements PMatrix /*, PConstants*/ {
   }
 
 
+  @Override
   public void apply(PMatrix source) {
     if (source instanceof PMatrix2D) {
       apply((PMatrix2D) source);
@@ -319,6 +334,7 @@ public final class PMatrix3D implements PMatrix /*, PConstants*/ {
   }
 
 
+  @Override
   public void apply(PMatrix2D source) {
     apply(source.m00, source.m01, 0, source.m02,
           source.m10, source.m11, 0, source.m12,
@@ -327,6 +343,7 @@ public final class PMatrix3D implements PMatrix /*, PConstants*/ {
   }
 
 
+  @Override
   public void apply(PMatrix3D source) {
     apply(source.m00, source.m01, source.m02, source.m03,
           source.m10, source.m11, source.m12, source.m13,
@@ -335,6 +352,7 @@ public final class PMatrix3D implements PMatrix /*, PConstants*/ {
   }
 
 
+  @Override
   public void apply(float n00, float n01, float n02,
                     float n10, float n11, float n12) {
     apply(n00, n01, 0, n02,
@@ -344,6 +362,7 @@ public final class PMatrix3D implements PMatrix /*, PConstants*/ {
   }
 
 
+  @Override
   public void apply(float n00, float n01, float n02, float n03,
                     float n10, float n11, float n12, float n13,
                     float n20, float n21, float n22, float n23,
@@ -379,6 +398,7 @@ public final class PMatrix3D implements PMatrix /*, PConstants*/ {
   /**
    * Apply the 3D equivalent of the 2D matrix supplied to the left of this one.
    */
+  @Override
   public void preApply(PMatrix2D left) {
     preApply(left.m00, left.m01, 0, left.m02,
              left.m10, left.m11, 0, left.m12,
@@ -390,6 +410,7 @@ public final class PMatrix3D implements PMatrix /*, PConstants*/ {
   /**
    * Apply another matrix to the left of this one.
    */
+  @Override
   public void preApply(PMatrix source) {
     if (source instanceof PMatrix2D) {
       preApply((PMatrix2D) source);
@@ -402,6 +423,7 @@ public final class PMatrix3D implements PMatrix /*, PConstants*/ {
   /**
    * Apply another matrix to the left of this one.
    */
+  @Override
   public void preApply(PMatrix3D left) {
     preApply(left.m00, left.m01, left.m02, left.m03,
              left.m10, left.m11, left.m12, left.m13,
@@ -413,6 +435,7 @@ public final class PMatrix3D implements PMatrix /*, PConstants*/ {
   /**
    * Apply the 3D equivalent of the 2D matrix supplied to the left of this one.
    */
+  @Override
   public void preApply(float n00, float n01, float n02,
                        float n10, float n11, float n12) {
     preApply(n00, n01, 0, n02,
@@ -425,6 +448,7 @@ public final class PMatrix3D implements PMatrix /*, PConstants*/ {
   /**
    * Apply another matrix to the left of this one.
    */
+  @Override
   public void preApply(float n00, float n01, float n02, float n03,
                        float n10, float n11, float n12, float n13,
                        float n20, float n21, float n22, float n23,
@@ -466,6 +490,7 @@ public final class PMatrix3D implements PMatrix /*, PConstants*/ {
    * will then be the matrix returned. This improves performance if you reuse
    * target, so it's recommended if you call this many times in draw().
    */
+  @Override
   public PVector mult(PVector source, PVector target) {
     if (target == null) {
       target = new PVector();
@@ -504,6 +529,7 @@ public final class PMatrix3D implements PMatrix /*, PConstants*/ {
    * Supplying and recycling a target array improves performance, so it's
    * recommended if you call this many times in draw.
    */
+  @Override
   public float[] mult(float[] source, float[] target) {
     if (target == null || target.length < 3) {
       target = new float[3];
@@ -623,6 +649,7 @@ public final class PMatrix3D implements PMatrix /*, PConstants*/ {
   /**
    * Transpose this matrix; rows become columns and columns rows.
    */
+  @Override
   public void transpose() {
     float temp;
     temp = m01; m01 = m10; m10 = temp;
@@ -865,19 +892,19 @@ public final class PMatrix3D implements PMatrix /*, PConstants*/ {
   //////////////////////////////////////////////////////////////
 
 
-  static private final float max(float a, float b) {
+  private static float max(float a, float b) {
     return (a > b) ? a : b;
   }
 
-  static private final float abs(float a) {
+  private static float abs(float a) {
     return (a < 0) ? -a : a;
   }
 
-  static private final float sin(float angle) {
+  private static float sin(float angle) {
     return (float) Math.sin(angle);
   }
 
-  static private final float cos(float angle) {
+  private static float cos(float angle) {
     return (float) Math.cos(angle);
   }
 }

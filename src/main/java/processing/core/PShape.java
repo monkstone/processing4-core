@@ -1448,26 +1448,26 @@ public class PShape implements PConstants {
   // TODO unapproved
   static protected PShape createShape(PApplet parent, PShape src) {
     PShape dest = null;
-    switch (src.family) {
-      case GROUP:
-        dest = parent.createShape(GROUP);
-        PShape.copyGroup(parent, src, dest);
-        break;
-      case PRIMITIVE:
-        dest = parent.createShape(src.kind, src.params);
-        PShape.copyPrimitive(src, dest);
-        break;
-      case GEOMETRY:
-        dest = parent.createShape(src.kind);
-        PShape.copyGeometry(src, dest);
-        break;
-      case PATH:
-        dest = parent.createShape(PATH);
-        PShape.copyPath(src, dest);
-        break;
-      default:
-        break;
-    }
+      switch (src.family) {
+          case GROUP:
+              dest = parent.createShape(GROUP);
+              PShape.copyGroup(parent, src, dest);
+              break;
+          case PRIMITIVE:
+              dest = parent.createShape(src.kind, src.params);
+              PShape.copyPrimitive(src, dest);
+              break;
+          case GEOMETRY:
+              dest = parent.createShape(src.kind);
+              PShape.copyGeometry(src, dest);
+              break;
+          case PATH:
+              dest = parent.createShape(PATH);
+              PShape.copyPath(src, dest);
+              break;
+          default:
+              break;
+      }
     dest.setName(src.name);
     return dest;
   }
@@ -1614,24 +1614,24 @@ public class PShape implements PConstants {
    * Draws the SVG document.
    */
   protected void drawImpl(PGraphics g) {
-    switch (family) {
-      case GROUP:
-        drawGroup(g);
-        break;
-      case PRIMITIVE:
-        drawPrimitive(g);
-        break;
-      case GEOMETRY:
-        // Not same as path: `kind` matters.
+      switch (family) {
+          case GROUP:
+              drawGroup(g);
+              break;
+          case PRIMITIVE:
+              drawPrimitive(g);
+              break;
+          case GEOMETRY:
+              // Not same as path: `kind` matters.
 //      drawPath(g);
-        drawGeometry(g);
-        break;
-      case PATH:
-        drawPath(g);
-        break;
-      default:
-        break;
-    }
+              drawGeometry(g);
+              break;
+          case PATH:
+              drawPath(g);
+              break;
+          default:
+              break;
+      }
   }
 
 
@@ -1643,98 +1643,98 @@ public class PShape implements PConstants {
 
 
   protected void drawPrimitive(PGraphics g) {
-    switch (kind) {
-      case POINT:
-        g.point(params[0], params[1]);
-        break;
-      case LINE:
-        if (params.length == 4) {  // 2D
-          g.line(params[0], params[1],
-            params[2], params[3]);
-        } else {  // 3D
-          g.line(params[0], params[1], params[2],
-            params[3], params[4], params[5]);
-        } break;
-      case TRIANGLE:
-        g.triangle(params[0], params[1],
-          params[2], params[3],
-          params[4], params[5]);
-        break;
-      case QUAD:
-        g.quad(params[0], params[1],
-          params[2], params[3],
-          params[4], params[5],
-          params[6], params[7]);
-        break;
-      case RECT:
-        if (imagePath != null){
-          loadImage(g);
-        } if (image != null) {
-          int oldMode = g.imageMode;
-          g.imageMode(CORNER);
-          g.image(image, params[0], params[1], params[2], params[3]);
-          g.imageMode(oldMode);
-        } else {
-          int oldMode = g.rectMode;
-          g.rectMode(rectMode);
-      switch (params.length) {
-        case 4:
-          g.rect(params[0], params[1],
-            params[2], params[3]);
-          break;
-        case 5:
-          g.rect(params[0], params[1],
-            params[2], params[3],
-            params[4]);
-          break;
-        case 8:
-          g.rect(params[0], params[1],
-            params[2], params[3],
-            params[4], params[5],
-            params[6], params[7]);
-          break;
-        default:
-          break;
+      switch (kind) {
+          case POINT:
+              g.point(params[0], params[1]);
+              break;
+          case LINE:
+              if (params.length == 4) {  // 2D
+                  g.line(params[0], params[1],
+                          params[2], params[3]);
+              } else {  // 3D
+                  g.line(params[0], params[1], params[2],
+                          params[3], params[4], params[5]);
+              }       break;
+          case TRIANGLE:
+              g.triangle(params[0], params[1],
+                      params[2], params[3],
+                      params[4], params[5]);
+              break;
+          case QUAD:
+              g.quad(params[0], params[1],
+                      params[2], params[3],
+                      params[4], params[5],
+                      params[6], params[7]);
+              break;
+          case RECT:
+              if (imagePath != null){
+                  loadImage(g);
+              }       if (image != null) {
+                  int oldMode = g.imageMode;
+                  g.imageMode(CORNER);
+                  g.image(image, params[0], params[1], params[2], params[3]);
+                  g.imageMode(oldMode);
+              } else {
+                  int oldMode = g.rectMode;
+                  g.rectMode(rectMode);
+          switch (params.length) {
+              case 4:
+                  g.rect(params[0], params[1],
+                          params[2], params[3]);
+                  break;
+              case 5:
+                  g.rect(params[0], params[1],
+                          params[2], params[3],
+                          params[4]);
+                  break;
+              case 8:
+                  g.rect(params[0], params[1],
+                          params[2], params[3],
+                          params[4], params[5],
+                          params[6], params[7]);
+                  break;
+              default:
+                  break;
+          }
+                  g.rectMode(oldMode);
+              }       break;
+          case ELLIPSE:
+              {
+                  int oldMode = g.ellipseMode;
+                  g.ellipseMode(ellipseMode);
+                  g.ellipse(params[0], params[1],
+                          params[2], params[3]);
+                  g.ellipseMode(oldMode);
+                  break;
+              }
+          case ARC:
+              {
+                  int oldMode = g.ellipseMode;
+                  g.ellipseMode(ellipseMode);
+                  if (params.length == 6) {
+                      g.arc(params[0], params[1],
+                              params[2], params[3],
+                              params[4], params[5]);
+                  } else if (params.length == 7) {
+                      g.arc(params[0], params[1],
+                              params[2], params[3],
+                              params[4], params[5],
+                              (int) params[6]);
+                  }           g.ellipseMode(oldMode);
+                  break;
+              }
+          case BOX:
+              if (params.length == 1) {
+                  g.box(params[0]);
+              } else {
+                  g.box(params[0], params[1], params[2]);
+              }       break;
+          case SPHERE:
+              g.sphere(params[0]);
+              break;
+          default:
+              break;
       }
-          g.rectMode(oldMode);
-        } break;
-      case ELLIPSE:
-        {
-          int oldMode = g.ellipseMode;
-          g.ellipseMode(ellipseMode);
-          g.ellipse(params[0], params[1],
-            params[2], params[3]);
-          g.ellipseMode(oldMode);
-          break;
-        }
-      case ARC:
-        {
-          int oldMode = g.ellipseMode;
-          g.ellipseMode(ellipseMode);
-          if (params.length == 6) {
-            g.arc(params[0], params[1],
-              params[2], params[3],
-              params[4], params[5]);
-          } else if (params.length == 7) {
-            g.arc(params[0], params[1],
-              params[2], params[3],
-              params[4], params[5],
-              (int) params[6]);
-          }   g.ellipseMode(oldMode);
-          break;
-        }
-      case BOX:
-        if (params.length == 1) {
-          g.box(params[0]);
-        } else {
-          g.box(params[0], params[1], params[2]);
-        } break;
-      case SPHERE:
-        g.sphere(params[0]);
-        break;
-      default:
-        break;
-    }
   }
 
 
@@ -2550,7 +2550,7 @@ public class PShape implements PConstants {
       vertices[index][PGraphics.A] = ((fill >> 24) & 0xFF) / 255.0f;
       vertices[index][PGraphics.R] = ((fill >> 16) & 0xFF) / 255.0f;
       vertices[index][PGraphics.G] = ((fill >>  8) & 0xFF) / 255.0f;
-      vertices[index][PGraphics.B] = ((fill) & 0xFF) / 255.0f;
+      vertices[index][PGraphics.B] = ((fill >>  0) & 0xFF) / 255.0f;
     }
   }
 
@@ -2705,7 +2705,7 @@ public class PShape implements PConstants {
     vertices[index][PGraphics.SA] = ((stroke >> 24) & 0xFF) / 255.0f;
     vertices[index][PGraphics.SR] = ((stroke >> 16) & 0xFF) / 255.0f;
     vertices[index][PGraphics.SG] = ((stroke >>  8) & 0xFF) / 255.0f;
-    vertices[index][PGraphics.SB] = ((stroke) & 0xFF) / 255.0f;
+    vertices[index][PGraphics.SB] = ((stroke >>  0) & 0xFF) / 255.0f;
   }
 
 
@@ -2869,7 +2869,7 @@ public class PShape implements PConstants {
 
     vertices[index][PGraphics.SPR] = ((specular >> 16) & 0xFF) / 255.0f;
     vertices[index][PGraphics.SPG] = ((specular >>  8) & 0xFF) / 255.0f;
-    vertices[index][PGraphics.SPB] = ((specular) & 0xFF) / 255.0f;
+    vertices[index][PGraphics.SPB] = ((specular >>  0) & 0xFF) / 255.0f;
   }
 
 
@@ -2918,7 +2918,7 @@ public class PShape implements PConstants {
 
     vertices[index][PGraphics.ER] = ((emissive >> 16) & 0xFF) / 255.0f;
     vertices[index][PGraphics.EG] = ((emissive >>  8) & 0xFF) / 255.0f;
-    vertices[index][PGraphics.EB] = ((emissive) & 0xFF) / 255.0f;
+    vertices[index][PGraphics.EB] = ((emissive >>  0) & 0xFF) / 255.0f;
   }
 
 
@@ -3005,43 +3005,44 @@ public class PShape implements PConstants {
    * with PATH shapes or GROUP shapes that contain other GROUPs or PATHs.
    */
   public boolean contains(float x, float y) {
-    switch (family) {
-      case PATH:
-        PVector p = new PVector(x, y);
-        if (matrix != null) {
-          // apply the inverse transformation matrix to the point coordinates
-          PMatrix inverseCoords = matrix.get();
-          // TODO why is this called twice? [fry 190724]
-          // commit was https://github.com/processing/processing/commit/027fc7a4f8e8d0a435366eae754304eea282512a
-          inverseCoords.invert();  // maybe cache this?
-          inverseCoords.invert();  // maybe cache this?
-          inverseCoords.mult(new PVector(x, y), p);
-        }
-        
-        // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
-        boolean c = false;
-        for (int i = 0, j = vertexCount-1; i < vertexCount; j = i++) {
-          if (((vertices[i][Y] > p.y) != (vertices[j][Y] > p.y)) &&
+    if (family == PATH) {
+      PVector p = new PVector(x, y);
+      if (matrix != null) {
+        // apply the inverse transformation matrix to the point coordinates
+        PMatrix inverseCoords = matrix.get();
+        // TODO why is this called twice? [fry 190724]
+        // commit was https://github.com/processing/processing/commit/027fc7a4f8e8d0a435366eae754304eea282512a
+        inverseCoords.invert();  // maybe cache this?
+        inverseCoords.invert();  // maybe cache this?
+        inverseCoords.mult(new PVector(x, y), p);
+      }
+
+      // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
+      boolean c = false;
+      for (int i = 0, j = vertexCount-1; i < vertexCount; j = i++) {
+        if (((vertices[i][Y] > p.y) != (vertices[j][Y] > p.y)) &&
             (p.x <
-            (vertices[j][X]-vertices[i][X]) *
-            (y-vertices[i][Y]) /
-            (vertices[j][1]-vertices[i][Y]) +
-            vertices[i][X])) {
-            c = !c;
-          }
+                (vertices[j][X]-vertices[i][X]) *
+                (y-vertices[i][Y]) /
+                (vertices[j][1]-vertices[i][Y]) +
+                vertices[i][X])) {
+          c = !c;
         }
-        return c;
-      case GROUP:
-        // If this is a group, loop through children until we find one that
-        // contains the supplied coordinates. If a child does not support
-        // contains() throw a warning and continue.
-        for (int i = 0; i < childCount; i++) {
-          if (children[i].contains(x, y)) return true;
-        }
-        return false;
-      default:
-        // https://github.com/processing/processing/issues/1280
-        throw new IllegalArgumentException("The contains() method is only implemented for paths.");
+      }
+      return c;
+
+    } else if (family == GROUP) {
+      // If this is a group, loop through children until we find one that
+      // contains the supplied coordinates. If a child does not support
+      // contains() throw a warning and continue.
+      for (int i = 0; i < childCount; i++) {
+        if (children[i].contains(x, y)) return true;
+      }
+      return false;
+
+    } else {
+      // https://github.com/processing/processing/issues/1280
+      throw new IllegalArgumentException("The contains() method is only implemented for paths.");
     }
   }
 

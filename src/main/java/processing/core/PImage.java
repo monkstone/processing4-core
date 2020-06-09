@@ -48,11 +48,11 @@ import java.util.Iterator;
    * fields for the <b>width</b> and <b>height</b> of the image, as well as
    * an array called <b>pixels[]</b> that contains the values for every pixel
    * in the image. The methods described below allow easy access to the
-   * image's pixels and alpha channel and simplify the process of compositing.<br/>
-   * <br/> using the <b>pixels[]</b> array, be sure to use the
+   * image's pixels and alpha channel and simplify the process of compositing.
+   *  using the <b>pixels[]</b> array, be sure to use the
    * <b>loadPixels()</b> method on the image to make sure that the pixel data
-   * is properly loaded.<br/>
-   * <br/> create a new image, use the <b>createImage()</b> function. Do not
+   * is properly loaded.
+   *  create a new image, use the <b>createImage()</b> function. Do not
    * use the syntax <b>new PImage()</b>.
    *
    * ( end auto-generated )
@@ -509,7 +509,7 @@ public class PImage implements PConstants, Cloneable {
    *
    * Loads the pixel data for the image into its <b>pixels[]</b> array. This
    * function must always be called before reading from or writing to <b>pixels[]</b>.
-   * <br/><br/> renderers may or may not seem to require <b>loadPixels()</b>
+   *  renderers may or may not seem to require <b>loadPixels()</b>
    * or <b>updatePixels()</b>. However, the rule is that any time you want to
    * manipulate the <b>pixels[]</b> array, you must first call
    * <b>loadPixels()</b>, and after changes have been made, call
@@ -548,7 +548,7 @@ public class PImage implements PConstants, Cloneable {
    * Updates the image with the data in its <b>pixels[]</b> array. Use in
    * conjunction with <b>loadPixels()</b>. If you're only reading pixels from
    * the array, there's no need to call <b>updatePixels()</b>.
-   * <br/><br/> renderers may or may not seem to require <b>loadPixels()</b>
+   *  renderers may or may not seem to require <b>loadPixels()</b>
    * or <b>updatePixels()</b>. However, the rule is that any time you want to
    * manipulate the <b>pixels[]</b> array, you must first call
    * <b>loadPixels()</b>, and after changes have been made, call
@@ -1072,8 +1072,8 @@ public class PImage implements PConstants, Cloneable {
   /**
    * ( begin auto-generated from PImage_filter.xml )
    *
-   * Filters an image as defined by one of the following modes:
-   THRESHOLD - converts the image to black and white pixels depending if
+   * Filters an image as defined by one of the following modes:<br
+   * />THRESHOLD - converts the image to black and white pixels depending if
    * they are above or below the threshold defined by the level parameter.
    * The level must be between 0.0 (black) and 1.0(white). If no level is
    * specified, 0.5 is used.
@@ -1733,12 +1733,12 @@ public class PImage implements PConstants, Cloneable {
    * necessarily "correct" code. No biggie, most software does. A nitpicker
    * can find numerous "off by 1 division" problems in the blend code where
    * <TT>&gt;&gt;8</TT> or <TT>&gt;&gt;7</TT> is used when strictly speaking
-   * <TT>/255.0</T> or <TT>/127.0</TT> should have been used.</P>
+   * <TT>/255.0</TT> or <TT>/127.0</TT> should have been used.</P>
    * <P>For instance, exclusion (not intended for real-time use) reads
    * <TT>r1 + r2 - ((2 * r1 * r2) / 255)</TT> because <TT>255 == 1.0</TT>
    * not <TT>256 == 1.0</TT>. In other words, <TT>(255*255)>>8</TT> is not
    * the same as <TT>(255*255)/255</TT>. But for real-time use the shifts
-   * are preferrable, and the difference is insignificant for applications
+   * are preferable, and the difference is insignificant for applications
    * built with Processing.</P>
    *
    * @webref color:creating_reading
@@ -3034,7 +3034,6 @@ int testFunction(int dst, int src) {
       return true;
 
     } catch (IOException e) {
-      e.printStackTrace();
     }
     return false;
   }
@@ -3387,7 +3386,6 @@ int testFunction(int dst, int src) {
        return true;
 
      } catch (IOException e) {
-       e.printStackTrace();
        return false;
      }
   }
@@ -3489,7 +3487,6 @@ int testFunction(int dst, int src) {
 
      } catch (IOException e) {
        System.err.println("Error while saving image.");
-       e.printStackTrace();
        success = false;
      }
      return success;

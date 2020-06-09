@@ -78,9 +78,9 @@ class FontTexture implements PConstants {
 
 
   protected void dispose() {
-    for (Texture texture : textures) {
-      texture.dispose();
-    }
+      for (Texture texture : textures) {
+          texture.dispose();
+      }
   }
 
 
@@ -183,9 +183,9 @@ class FontTexture implements PConstants {
 
 
   public void end() {
-    for (Texture texture : textures) {
-      pgl.disableTexturing(texture.glTarget);
-    }
+      for (Texture texture : textures) {
+          pgl.disableTexturing(texture.glTarget);
+      }
   }
 
 
@@ -204,12 +204,12 @@ class FontTexture implements PConstants {
 
 
   public void updateGlyphsTexCoords() {
-    // loop over current glyphs.
-    for (TextureInfo tinfo : glyphTexinfos) {
-      if (tinfo != null && tinfo.texIndex == lastTex) {
-        tinfo.updateUV();
+      // loop over current glyphs.
+      for (TextureInfo tinfo : glyphTexinfos) {
+          if (tinfo != null && tinfo.texIndex == lastTex) {
+              tinfo.updateUV();
+          }
       }
-    }
   }
 
 
@@ -231,15 +231,15 @@ class FontTexture implements PConstants {
 
   public boolean contextIsOutdated() {
     boolean outdated = false;
-    for (Texture texture : textures) {
-      if (texture.contextIsOutdated()) {
-        outdated = true;
-      }
-    }
-    if (outdated) {
       for (Texture texture : textures) {
-        texture.dispose();
+          if (texture.contextIsOutdated()) {
+              outdated = true;
+          }
       }
+    if (outdated) {
+        for (Texture texture : textures) {
+            texture.dispose();
+        }
     }
     return outdated;
   }
