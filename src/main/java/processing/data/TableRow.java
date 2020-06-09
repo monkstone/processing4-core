@@ -47,7 +47,6 @@ public interface TableRow {
    * @see TableRow#getFloat(int)
    * @see TableRow#getString(int)
    */
-
   public long getLong(int column);
 
   /**
@@ -68,7 +67,7 @@ public interface TableRow {
    * @param columnName title of the column to reference
    */
   public float getFloat(String columnName);
-  
+
   /**
    * @brief Get a double value from the specified column
    * @param column ID number of the column to reference
@@ -76,7 +75,7 @@ public interface TableRow {
    * @see TableRow#getString(int)
    */
   public double getDouble(int column);
-  
+
   /**
    * @param columnName title of the column to reference
    */
@@ -91,6 +90,7 @@ public interface TableRow {
    * @see TableRow#setFloat(int, float)
    */
   public void setString(int column, String value);
+
   /**
    * @param columnName title of the target column
    */
@@ -110,7 +110,7 @@ public interface TableRow {
    * @param columnName title of the target column
    */
   public void setInt(String columnName, int value);
-  
+
   /**
    * @brief Store a long value in the specified column
    * @param column ID number of the target column
@@ -119,7 +119,7 @@ public interface TableRow {
    * @see TableRow#setString(int, String)
    */
   public void setLong(int column, long value);
-  
+
   /**
    * @param columnName title of the target column
    */
@@ -134,7 +134,7 @@ public interface TableRow {
    * @see TableRow#setString(int, String)
    */
   public void setFloat(int column, float value);
-  
+
   /**
    * @param columnName title of the target column
    */
@@ -148,7 +148,7 @@ public interface TableRow {
    * @see TableRow#setString(int, String)
    */
   public void setDouble(int column, double value);
-  
+
   /**
    * @param columnName title of the target column
    */
@@ -160,19 +160,19 @@ public interface TableRow {
    * @return count of all columns
    */
   public int getColumnCount();
-  
+
   /**
    * @brief Get the column type.
    * @param columnName title of the target column
    * @return type of the column
    */
   public int getColumnType(String columnName);
-  
+
   /**
    * @param column ID number of the target column
    */
   public int getColumnType(int column);
-  
+
   /**
    * @brief Get the all column types
    * @return list of all column types
@@ -194,5 +194,6 @@ public interface TableRow {
   public String[] getColumnTitles();
 
   public void write(PrintWriter writer);
+
   public void print();
 }

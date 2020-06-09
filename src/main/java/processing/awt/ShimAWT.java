@@ -34,14 +34,14 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PImage;
 
-
 /**
- * This class exists as an abstraction layer to remove AWT from PApplet.
- * It is a staging area for AWT-specific code that's shared by the Java2D,
- * JavaFX, and JOGL renderers. Once PSurfaceFX and PSurfaceJOGL have
- * their own implementations, these methods will move to PSurfaceAWT.
+ * This class exists as an abstraction layer to remove AWT from PApplet. It is a
+ * staging area for AWT-specific code that's shared by the Java2D, JavaFX, and
+ * JOGL renderers. Once PSurfaceFX and PSurfaceJOGL have their own
+ * implementations, these methods will move to PSurfaceAWT.
  */
 public class ShimAWT implements PConstants {
+
   /*
   PGraphics graphics;
   PApplet sketch;
@@ -51,7 +51,7 @@ public class ShimAWT implements PConstants {
     this.graphics = graphics;
     this.sketch = sketch;
   }
-  */
+   */
   static private ShimAWT instance;
 
   private final GraphicsDevice[] displayDevices;
@@ -59,15 +59,15 @@ public class ShimAWT implements PConstants {
   private final int displayWidth;
   private final int displayHeight;
 
-
-  /** Only needed for display functions */
+  /**
+   * Only needed for display functions
+   */
   static private ShimAWT getInstance() {
     if (instance == null) {
       instance = new ShimAWT();
     }
     return instance;
   }
-
 
   private ShimAWT() {
     // Need the list of display devices to be queried already for usage below.
@@ -87,28 +87,23 @@ public class ShimAWT implements PConstants {
 //    }
     // When this was called, display will always be unset (even in 3.x),
     // since this happens before settings() is called.
-
     // Set displayWidth and displayHeight for people still using those.
     DisplayMode displayMode = device.getDisplayMode();
     displayWidth = displayMode.getWidth();
     displayHeight = displayMode.getHeight();
   }
 
-
   static public int getDisplayWidth() {
     return getInstance().displayWidth;
   }
-
 
   static public int getDisplayHeight() {
     return getInstance().displayHeight;
   }
 
-
   static public int getDisplayCount() {
     return getInstance().displayDevices.length;
   }
-
 
   static public int getDisplayDensity(int num) {
     return getInstance().displayDensityImpl(num);
@@ -129,22 +124,19 @@ public class ShimAWT implements PConstants {
     // If nobody's density is 2 then everyone is 1
     return 1;
   }
-  */
-
-
+   */
   private int displayDensityImpl(int display) {
     if (display > 0 && display <= displayDevices.length) {
-      GraphicsConfiguration graphicsConfig =
-        displayDevices[display - 1].getDefaultConfiguration();
+      GraphicsConfiguration graphicsConfig
+              = displayDevices[display - 1].getDefaultConfiguration();
       AffineTransform tx = graphicsConfig.getDefaultTransform();
       return (int) Math.round(tx.getScaleX());
     }
 
-    System.err.println("Display " + display + " does not exist, " +
-                       "returning 1 for displayDensity(" + display + ")");
+    System.err.println("Display " + display + " does not exist, "
+            + "returning 1 for displayDensity(" + display + ")");
     return 1;  // not the end of the world, so don't throw a RuntimeException
   }
-
 
   static public PImage loadImage(PApplet sketch, String filename, Object... args) {
     String extension = null;
@@ -177,7 +169,9 @@ public class ShimAWT implements PConstants {
     if (extension.equals("tga")) {
       try {
         InputStream input = sketch.createInput(filename);
-        if (input == null) return null;
+        if (input == null) {
+          return null;
+        }
 
         PImage image = PImage.loadTGA(input);
         image.parent = sketch;
@@ -190,7 +184,7 @@ public class ShimAWT implements PConstants {
 
     if (extension.equals("tif") || extension.equals("tiff")) {
       InputStream input = sketch.createInput(filename);
-      PImage image =  (input == null) ? null : PImage.loadTIFF(input);
+      PImage image = (input == null) ? null : PImage.loadTIFF(input);
       return image;
     }
 
@@ -198,9 +192,9 @@ public class ShimAWT implements PConstants {
     // because the javax.imageio code was found to be much slower.
     // http://dev.processing.org/bugs/show_bug.cgi?id=392
     try {
-      if (extension.equals("jpg") || extension.equals("jpeg") ||
-          extension.equals("gif") || extension.equals("png") ||
-          extension.equals("unknown")) {
+      if (extension.equals("jpg") || extension.equals("jpeg")
+              || extension.equals("gif") || extension.equals("png")
+              || extension.equals("unknown")) {
         byte[] bytes = sketch.loadBytes(filename);
         if (bytes == null) {
           return null;
@@ -212,8 +206,8 @@ public class ShimAWT implements PConstants {
             BufferedImage buffImage = (BufferedImage) awtImage;
             int space = buffImage.getColorModel().getColorSpace().getType();
             if (space == ColorSpace.TYPE_CMYK) {
-              System.err.println(filename + " is a CMYK image, " +
-                                 "only RGB images are supported.");
+              System.err.println(filename + " is a CMYK image, "
+                      + "only RGB images are supported.");
               return null;
               /*
               // wishful thinking, appears to not be supported
@@ -225,19 +219,19 @@ public class ShimAWT implements PConstants {
               ColorConvertOp op = new ColorConvertOp(null);
               op.filter(buffImage, destImage);
               image = new PImage(destImage);
-              */
+               */
             }
           }
 
           PImage image = new PImageAWT(awtImage);
           if (image.width == -1) {
-            System.err.println("The file " + filename +
-                               " contains bad image data, or may not be an image.");
+            System.err.println("The file " + filename
+                    + " contains bad image data, or may not be an image.");
           }
 
           // if it's a .gif image, test to see if it has transparency
-          if (extension.equals("gif") || extension.equals("png") ||
-              extension.equals("unknown")) {
+          if (extension.equals("gif") || extension.equals("png")
+                  || extension.equals("unknown")) {
             image.checkAlpha();
           }
 
@@ -246,7 +240,7 @@ public class ShimAWT implements PConstants {
         }
       }
     } catch (Exception e) {
-        // show error, but move on to the stuff below, see if it'll work
+      // show error, but move on to the stuff below, see if it'll work
 
     }
 
@@ -254,11 +248,11 @@ public class ShimAWT implements PConstants {
       loadImageFormats = ImageIO.getReaderFormatNames();
     }
     if (loadImageFormats != null) {
-        for (String loadImageFormat : loadImageFormats) {
-            if (extension.equals(loadImageFormat)) {
-                return loadImageIO(sketch, filename);
-            }
+      for (String loadImageFormat : loadImageFormats) {
+        if (extension.equals(loadImageFormat)) {
+          return loadImageIO(sketch, filename);
         }
+      }
     }
 
     // failed, could not load image after all those attempts
@@ -267,7 +261,6 @@ public class ShimAWT implements PConstants {
   }
 
   static protected String[] loadImageFormats;
-
 
   /**
    * Use Java 1.4 ImageIO methods to load an image.
@@ -287,7 +280,6 @@ public class ShimAWT implements PConstants {
 
       //bi.getRGB(0, 0, outgoing.width, outgoing.height,
       //          outgoing.pixels, 0, outgoing.width);
-
       // check the alpha for this image
       // was gonna call getType() on the image to see if RGB or ARGB,
       // but it's not actually useful, since gif images will come through
@@ -305,7 +297,6 @@ public class ShimAWT implements PConstants {
       return null;
     }
   }
-
 
   static public void initRun() {
     // Supposed to help with flicker, but no effect on OS X.
@@ -341,13 +332,11 @@ public class ShimAWT implements PConstants {
     // If nobody's density is 2 then everyone is 1
     return 1;
   }
-  */
-
-
- /**
-  * @param display the display number to check
-  * (1-indexed to match the Preferences dialog box)
-  */
+   */
+  /**
+   * @param display the display number to check (1-indexed to match the
+   * Preferences dialog box)
+   */
   /*
   public int displayDensity(int display) {
     if (display > 0 && display <= displayDevices.length) {
@@ -360,14 +349,12 @@ public class ShimAWT implements PConstants {
     System.err.println("Display " + display + " does not exist, returning ");
     return 1;  // not the end of the world, so don't throw a RuntimeException
   }
-  */
-
-
+   */
   static public void selectInput(String prompt, String callbackMethod,
-                                 File file, Object callbackObject) {
+          File file, Object callbackObject) {
     EventQueue.invokeLater(() -> {
       selectImpl(prompt, callbackMethod, file,
-                 callbackObject, null, FileDialog.LOAD);
+              callbackObject, null, FileDialog.LOAD);
     });
   }
 
@@ -384,14 +371,12 @@ public class ShimAWT implements PConstants {
                                   PApplet sketch) {
     selectImpl(prompt, callbackMethod, file, callbackObject, parent, FileDialog.SAVE, sketch);
   }
-  */
-
-
+   */
   static public void selectOutput(String prompt, String callbackMethod,
-                                  File file, Object callbackObject) {
+          File file, Object callbackObject) {
     EventQueue.invokeLater(() -> {
       selectImpl(prompt, callbackMethod, file,
-                 callbackObject, null, FileDialog.SAVE);
+              callbackObject, null, FileDialog.SAVE);
     });
   }
 
@@ -420,15 +405,13 @@ public class ShimAWT implements PConstants {
       }
     });
   }
-  */
-
-
+   */
   static public void selectImpl(final String prompt,
-                                final String callbackMethod,
-                                final File defaultSelection,
-                                final Object callbackObject,
-                                final Frame parentFrame,
-                                final int mode) {
+          final String callbackMethod,
+          final File defaultSelection,
+          final Object callbackObject,
+          final Frame parentFrame,
+          final int mode) {
     File selectedFile = null;
 
     if (PApplet.useNativeSelect) {
@@ -465,14 +448,13 @@ public class ShimAWT implements PConstants {
     PApplet.selectCallback(selectedFile, callbackMethod, callbackObject);
   }
 
-
   static public void selectFolder(final String prompt,
-                                  final String callbackMethod,
-                                  final File defaultSelection,
-                                  final Object callbackObject) {
+          final String callbackMethod,
+          final File defaultSelection,
+          final Object callbackObject) {
     EventQueue.invokeLater(() -> {
       selectFolderImpl(prompt, callbackMethod, defaultSelection,
-                       callbackObject, null);
+              callbackObject, null);
     });
   }
 
@@ -500,18 +482,16 @@ public class ShimAWT implements PConstants {
                        callbackObject, parentFrame, sketch);
     });
   }
-  */
-
-
+   */
   static public void selectFolderImpl(final String prompt,
-                                      final String callbackMethod,
-                                      final File defaultSelection,
-                                      final Object callbackObject,
-                                      final Frame parentFrame) {
+          final String callbackMethod,
+          final File defaultSelection,
+          final Object callbackObject,
+          final Frame parentFrame) {
     File selectedFile = null;
     if (PApplet.platform == PConstants.MACOS && PApplet.useNativeSelect) {
-      FileDialog fileDialog =
-        new FileDialog(parentFrame, prompt, FileDialog.LOAD);
+      FileDialog fileDialog
+              = new FileDialog(parentFrame, prompt, FileDialog.LOAD);
       if (defaultSelection != null) {
         fileDialog.setDirectory(defaultSelection.getAbsolutePath());
       }
@@ -539,12 +519,11 @@ public class ShimAWT implements PConstants {
     PApplet.selectCallback(selectedFile, callbackMethod, callbackObject);
   }
 
-
   static private boolean lookAndFeelCheck;
 
   /**
-   * Initialize the Look & Feel if it hasn't been already.
-   * Call this before using any Swing-related code in PApplet methods.
+   * Initialize the Look & Feel if it hasn't been already. Call this before
+   * using any Swing-related code in PApplet methods.
    */
   static private void checkLookAndFeel() {
     if (!lookAndFeelCheck) {
@@ -553,19 +532,18 @@ public class ShimAWT implements PConstants {
         // Which also is not scaled properly with HiDPI interfaces.
         try {
           UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) { }
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
+        }
       }
       lookAndFeelCheck = true;
     }
   }
-
 
   // TODO maybe call this with reflection from inside PApplet?
   // longer term, develop a more general method for other platforms
   static public File getWindowsDesktop() {
     return FileSystemView.getFileSystemView().getHomeDirectory();
   }
-
 
   static public boolean openLink(String url) {
     try {

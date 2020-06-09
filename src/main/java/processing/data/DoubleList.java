@@ -8,28 +8,26 @@ import java.util.Random;
 
 import processing.core.PApplet;
 
-
 /**
  * Helper class for a list of floats. Lists are designed to have some of the
  * features of ArrayLists, but to maintain the simplicity and efficiency of
  * working with arrays.
  *
- * Functions like sort() and shuffle() always act on the list itself. To get
- * a sorted copy, use list.copy().sort().
+ * Functions like sort() and shuffle() always act on the list itself. To get a
+ * sorted copy, use list.copy().sort().
  *
  * @nowebref
  * @see IntList
  * @see StringList
  */
 public class DoubleList implements Iterable<Double> {
+
   int count;
   double[] data;
-
 
   public DoubleList() {
     data = new double[10];
   }
-
 
   /**
    * @nowebref
@@ -37,7 +35,6 @@ public class DoubleList implements Iterable<Double> {
   public DoubleList(int length) {
     data = new double[length];
   }
-
 
   /**
    * @nowebref
@@ -48,11 +45,11 @@ public class DoubleList implements Iterable<Double> {
     System.arraycopy(list, 0, data, 0, count);
   }
 
-
   /**
-   * Construct an FloatList from an iterable pile of objects.
-   * For instance, a double array, an array of strings, who knows).
-   * Un-parseable or null values will be set to NaN.
+   * Construct an FloatList from an iterable pile of objects. For instance, a
+   * double array, an array of strings, who knows). Un-parseable or null values
+   * will be set to NaN.
+   *
    * @nowebref
    */
   public DoubleList(Iterable<Object> iter) {
@@ -69,10 +66,9 @@ public class DoubleList implements Iterable<Double> {
     crop();
   }
 
-
   /**
-   * Construct an FloatList from a random pile of objects.
-   * Un-parseable or null values will be set to NaN.
+   * Construct an FloatList from a random pile of objects. Un-parseable or null
+   * values will be set to NaN.
    */
   public DoubleList(Object... items) {
     // nuts, no good way to pass missingValue to this fn (varargs must be last)
@@ -98,19 +94,17 @@ public class DoubleList implements Iterable<Double> {
     }
   }
 
-
   /**
    * Improve efficiency by removing allocated but unused entries from the
-   * internal array used to store the data. Set to private, though it could
-   * be useful to have this public if lists are frequently making drastic
-   * size changes (from very large to very small).
+   * internal array used to store the data. Set to private, though it could be
+   * useful to have this public if lists are frequently making drastic size
+   * changes (from very large to very small).
    */
   private void crop() {
     if (count != data.length) {
       data = PApplet.subset(data, 0, count);
     }
   }
-
 
   /**
    * Get the length of the list.
@@ -121,7 +115,6 @@ public class DoubleList implements Iterable<Double> {
   public int size() {
     return count;
   }
-
 
   public void resize(int length) {
     if (length > data.length) {
@@ -135,7 +128,6 @@ public class DoubleList implements Iterable<Double> {
     count = length;
   }
 
-
   /**
    * Remove all entries from the list.
    *
@@ -145,7 +137,6 @@ public class DoubleList implements Iterable<Double> {
   public void clear() {
     count = 0;
   }
-
 
   /**
    * Get an entry at a particular index.
@@ -160,10 +151,9 @@ public class DoubleList implements Iterable<Double> {
     return data[index];
   }
 
-
   /**
-   * Set the entry at a particular index. If the index is past the length of
-   * the list, it'll expand the list to accommodate, and fill the intermediate
+   * Set the entry at a particular index. If the index is past the length of the
+   * list, it'll expand the list to accommodate, and fill the intermediate
    * entries with 0s.
    *
    * @webref doublelist:method
@@ -171,31 +161,30 @@ public class DoubleList implements Iterable<Double> {
    */
   public void set(int index, double what) {
     if (index >= count) {
-      data = PApplet.expand(data, index+1);
+      data = PApplet.expand(data, index + 1);
       for (int i = count; i < index; i++) {
         data[i] = 0;
       }
-      count = index+1;
+      count = index + 1;
     }
     data[index] = what;
   }
 
-
-  /** Just an alias for append(), but matches pop() */
+  /**
+   * Just an alias for append(), but matches pop()
+   */
   public void push(double value) {
     append(value);
   }
-
 
   public double pop() {
     if (count == 0) {
       throw new RuntimeException("Can't call pop() on an empty list");
     }
-    double value = get(count-1);
+    double value = get(count - 1);
     count--;
     return value;
   }
-
 
   /**
    * Remove an element from the specified index.
@@ -215,13 +204,12 @@ public class DoubleList implements Iterable<Double> {
 //    data = outgoing;
     // For most cases, this actually appears to be faster
     // than arraycopy() on an array copying into itself.
-    for (int i = index; i < count-1; i++) {
-      data[i] = data[i+1];
+    for (int i = index; i < count - 1; i++) {
+      data[i] = data[i + 1];
     }
     count--;
     return entry;
   }
-
 
   // Remove the first instance of a particular value,
   // and return the index at which it was found.
@@ -233,7 +221,6 @@ public class DoubleList implements Iterable<Double> {
     }
     return -1;
   }
-
 
   // Remove all instances of a particular value,
   // and return the number of values found and removed
@@ -257,8 +244,9 @@ public class DoubleList implements Iterable<Double> {
     return removed;
   }
 
-
-  /** Replace the first instance of a particular value */
+  /**
+   * Replace the first instance of a particular value
+   */
   public boolean replaceValue(double value, double newValue) {
     if (Double.isNaN(value)) {
       for (int i = 0; i < count; i++) {
@@ -277,8 +265,9 @@ public class DoubleList implements Iterable<Double> {
     return false;
   }
 
-
-  /** Replace all instances of a particular value */
+  /**
+   * Replace all instances of a particular value
+   */
   public boolean replaceValues(double value, double newValue) {
     boolean changed = false;
     if (Double.isNaN(value)) {
@@ -299,8 +288,6 @@ public class DoubleList implements Iterable<Double> {
     return changed;
   }
 
-
-
   /**
    * Add a new entry to the list.
    *
@@ -314,13 +301,11 @@ public class DoubleList implements Iterable<Double> {
     data[count++] = value;
   }
 
-
   public void append(double[] values) {
     for (double v : values) {
       append(v);
     }
   }
-
 
   public void append(DoubleList list) {
     for (double v : list.values()) {  // will concat the list...
@@ -328,14 +313,14 @@ public class DoubleList implements Iterable<Double> {
     }
   }
 
-
-  /** Add this value, but only if it's not already in the list. */
+  /**
+   * Add this value, but only if it's not already in the list.
+   */
   public void appendUnique(double value) {
     if (!hasValue(value)) {
       append(value);
     }
   }
-
 
 //  public void insert(int index, int value) {
 //    if (index+1 > count) {
@@ -365,12 +350,9 @@ public class DoubleList implements Iterable<Double> {
 //      count++;
 //    }
 //  }
-
-
   public void insert(int index, double value) {
-    insert(index, new double[] { value });
+    insert(index, new double[]{value});
   }
-
 
   // same as splice
   public void insert(int index, double[] values) {
@@ -391,7 +373,7 @@ public class DoubleList implements Iterable<Double> {
 
 //    if (index < count) {
     // The index was inside count, so it's a true splice/insert
-    System.arraycopy(data, index, temp, index+values.length, count - index);
+    System.arraycopy(data, index, temp, index + values.length, count - index);
     count = count + values.length;
 //    } else {
 //      // The index was past 'count', so the new count is weirder
@@ -400,15 +382,12 @@ public class DoubleList implements Iterable<Double> {
     data = temp;
   }
 
-
   public void insert(int index, DoubleList list) {
     insert(index, list.values());
   }
 
-
-    // below are aborted attempts at more optimized versions of the code
-    // that are harder to read and debug...
-
+  // below are aborted attempts at more optimized versions of the code
+  // that are harder to read and debug...
 //    if (index + values.length >= count) {
 //      // We're past the current 'count', check to see if we're still allocated
 //      // index 9, data.length = 10, values.length = 1
@@ -447,9 +426,9 @@ public class DoubleList implements Iterable<Double> {
 //      data[index] = value;
 //      count++;
 //    }
-
-
-  /** Return the first index of a particular value. */
+  /**
+   * Return the first index of a particular value.
+   */
   public int index(double what) {
     /*
     if (indexCache != null) {
@@ -459,7 +438,7 @@ public class DoubleList implements Iterable<Double> {
         return -1;
       }
     }
-    */
+     */
     for (int i = 0; i < count; i++) {
       if (data[i] == what) {
         return i;
@@ -467,7 +446,6 @@ public class DoubleList implements Iterable<Double> {
     }
     return -1;
   }
-
 
   /**
    * @webref doublelist:method
@@ -490,13 +468,11 @@ public class DoubleList implements Iterable<Double> {
     return false;
   }
 
-
   private void boundsProblem(int index, String method) {
-    final String msg = String.format("The list size is %d. " +
-      "You cannot %s() to element %d.", count, method, index);
+    final String msg = String.format("The list size is %d. "
+            + "You cannot %s() to element %d.", count, method, index);
     throw new ArrayIndexOutOfBoundsException(msg);
   }
-
 
   /**
    * @webref doublelist:method
@@ -510,7 +486,6 @@ public class DoubleList implements Iterable<Double> {
     }
   }
 
-
   /**
    * @webref doublelist:method
    * @brief Subtract from a value
@@ -522,7 +497,6 @@ public class DoubleList implements Iterable<Double> {
       boundsProblem(index, "sub");
     }
   }
-
 
   /**
    * @webref doublelist:method
@@ -536,7 +510,6 @@ public class DoubleList implements Iterable<Double> {
     }
   }
 
-
   /**
    * @webref doublelist:method
    * @brief Divide a value
@@ -549,16 +522,14 @@ public class DoubleList implements Iterable<Double> {
     }
   }
 
-
   private void checkMinMax(String functionName) {
     if (count == 0) {
-      String msg =
-        String.format("Cannot use %s() on an empty %s.",
+      String msg
+              = String.format("Cannot use %s() on an empty %s.",
                       functionName, getClass().getSimpleName());
       throw new RuntimeException(msg);
     }
   }
-
 
   /**
    * @webref doublelist:method
@@ -569,7 +540,6 @@ public class DoubleList implements Iterable<Double> {
     int index = minIndex();
     return index == -1 ? Double.NaN : data[index];
   }
-
 
   public int minIndex() {
     checkMinMax("minIndex");
@@ -582,7 +552,7 @@ public class DoubleList implements Iterable<Double> {
         mi = i;
 
         // calculate the rest
-        for (int j = i+1; j < count; j++) {
+        for (int j = i + 1; j < count; j++) {
           double d = data[j];
           if (!Double.isNaN(d) && (d < m)) {
             m = data[j];
@@ -595,7 +565,6 @@ public class DoubleList implements Iterable<Double> {
     return mi;
   }
 
-
   /**
    * @webref doublelist:method
    * @brief Return the largest value
@@ -605,7 +574,6 @@ public class DoubleList implements Iterable<Double> {
     int index = maxIndex();
     return index == -1 ? Double.NaN : data[index];
   }
-
 
   public int maxIndex() {
     checkMinMax("maxIndex");
@@ -618,7 +586,7 @@ public class DoubleList implements Iterable<Double> {
         mi = i;
 
         // calculate the rest
-        for (int j = i+1; j < count; j++) {
+        for (int j = i + 1; j < count; j++) {
           double d = data[j];
           if (!Double.isNaN(d) && (d > m)) {
             m = data[j];
@@ -631,7 +599,6 @@ public class DoubleList implements Iterable<Double> {
     return mi;
   }
 
-
   public double sum() {
     double sum = 0;
     for (int i = 0; i < count; i++) {
@@ -639,7 +606,6 @@ public class DoubleList implements Iterable<Double> {
     }
     return sum;
   }
-
 
   /**
    * Sorts the array in place.
@@ -650,7 +616,6 @@ public class DoubleList implements Iterable<Double> {
   public void sort() {
     Arrays.sort(data, 0, count);
   }
-
 
   /**
    * Reverse sort, orders values from highest to lowest
@@ -700,32 +665,25 @@ public class DoubleList implements Iterable<Double> {
     }.run();
   }
 
-
   // use insert()
 //  public void splice(int index, int value) {
 //  }
-
-
 //  public void subset(int start) {
 //    subset(start, count - start);
 //  }
-
-
 //  public void subset(int start, int num) {
 //    for (int i = 0; i < num; i++) {
 //      data[i] = data[i+start];
 //    }
 //    count = num;
 //  }
-
-
   /**
    * @webref doublelist:method
    * @brief Reverse the order of the list elements
    */
   public void reverse() {
     int ii = count - 1;
-    for (int i = 0; i < count/2; i++) {
+    for (int i = 0; i < count / 2; i++) {
       double t = data[i];
       data[i] = data[ii];
       data[ii] = t;
@@ -733,10 +691,9 @@ public class DoubleList implements Iterable<Double> {
     }
   }
 
-
   /**
-   * Randomize the order of the list elements. Note that this does not
-   * obey the randomSeed() function in PApplet.
+   * Randomize the order of the list elements. Note that this does not obey the
+   * randomSeed() function in PApplet.
    *
    * @webref doublelist:method
    * @brief Randomize the order of the list elements
@@ -753,7 +710,6 @@ public class DoubleList implements Iterable<Double> {
     }
   }
 
-
   /**
    * Randomize the list order using the random() function from the specified
    * sketch, allowing shuffle() to use its current randomSeed() setting.
@@ -769,26 +725,25 @@ public class DoubleList implements Iterable<Double> {
     }
   }
 
-
   public DoubleList copy() {
     DoubleList outgoing = new DoubleList(data);
     outgoing.count = count;
     return outgoing;
   }
 
-
   /**
    * Returns the actual array being used to store the data. For advanced users,
-   * this is the fastest way to access a large list. Suitable for iterating
-   * with a for() loop, but modifying the list will have terrible consequences.
+   * this is the fastest way to access a large list. Suitable for iterating with
+   * a for() loop, but modifying the list will have terrible consequences.
    */
   public double[] values() {
     crop();
     return data;
   }
 
-
-  /** Implemented this way so that we can use a FloatList in a for loop. */
+  /**
+   * Implemented this way so that we can use a FloatList in a for loop.
+   */
   @Override
   public Iterator<Double> iterator() {
 //  }
@@ -808,14 +763,14 @@ public class DoubleList implements Iterable<Double> {
       }
 
       public boolean hasNext() {
-        return index+1 < count;
+        return index + 1 < count;
       }
     };
   }
 
-
   /**
    * Create a new array with a copy of all the values.
+   *
    * @return an array sized by the length of the list with each of the values.
    * @webref doublelist:method
    * @brief Create a new array with a copy of all the values
@@ -824,10 +779,10 @@ public class DoubleList implements Iterable<Double> {
     return array(null);
   }
 
-
   /**
-   * Copy values into the specified array. If the specified array is null or
-   * not the same size, a new array will be allocated.
+   * Copy values into the specified array. If the specified array is null or not
+   * the same size, a new array will be allocated.
+   *
    * @param array
    */
   public double[] array(double[] array) {
@@ -838,11 +793,10 @@ public class DoubleList implements Iterable<Double> {
     return array;
   }
 
-
   /**
    * Returns a normalized version of this array. Called getPercent() for
-   * consistency with the Dict classes. It's a getter method because it needs
-   * to returns a new list (because IntList/Dict can't do percentages or
+   * consistency with the Dict classes. It's a getter method because it needs to
+   * returns a new list (because IntList/Dict can't do percentages or
    * normalization in place on int values).
    */
   public DoubleList getPercent() {
@@ -858,18 +812,15 @@ public class DoubleList implements Iterable<Double> {
     return outgoing;
   }
 
-
   public DoubleList getSubset(int start) {
     return getSubset(start, count - start);
   }
-
 
   public DoubleList getSubset(int start, int num) {
     double[] subset = new double[num];
     System.arraycopy(data, start, subset, 0, num);
     return new DoubleList(subset);
   }
-
 
   public String join(String separator) {
     if (count == 0) {
@@ -884,13 +835,11 @@ public class DoubleList implements Iterable<Double> {
     return sb.toString();
   }
 
-
   public void print() {
     for (int i = 0; i < count; i++) {
       System.out.format("[%d] %f%n", i, data[i]);
     }
   }
-
 
   /**
    * Save tab-delimited entries to a file (TSV format, UTF-8 encoding)
@@ -900,7 +849,6 @@ public class DoubleList implements Iterable<Double> {
     write(writer);
     writer.close();
   }
-
 
   /**
    * Write entries to a PrintWriter, one per line
@@ -912,14 +860,12 @@ public class DoubleList implements Iterable<Double> {
     writer.flush();
   }
 
-
   /**
    * Return this dictionary as a String in JSON format.
    */
   public String toJSON() {
     return "[ " + join(", ") + " ]";
   }
-
 
   @Override
   public String toString() {

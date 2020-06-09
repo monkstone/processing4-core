@@ -1,6 +1,6 @@
 /* -*- mode: java; c-basic-offset: 2; indent-tabs-mode: nil -*- */
 
-/*
+ /*
   Part of the Processing project - http://processing.org
 
   Copyright (c) 2015 The Processing Foundation
@@ -18,8 +18,7 @@
   Public License along with this library; if not, write to the
   Free Software Foundation, Inc., 59 Temple Place, Suite 330,
   Boston, MA  02111-1307  USA
-*/
-
+ */
 package processing.awt;
 
 import java.awt.Graphics2D;
@@ -35,17 +34,16 @@ import java.io.IOException;
 
 import processing.core.PImage;
 
-
 public class PImageAWT extends PImage {
 
   /**
-   * Construct a new PImage from a java.awt.Image. This constructor assumes
-   * that you've done the work of making sure a MediaTracker has been used
-   * to fully download the data and that the img is valid.
+   * Construct a new PImage from a java.awt.Image. This constructor assumes that
+   * you've done the work of making sure a MediaTracker has been used to fully
+   * download the data and that the img is valid.
    *
    * @nowebref
-   * @param img assumes a MediaTracker has been used to fully download
-   * the data and the img is valid
+   * @param img assumes a MediaTracker has been used to fully download the data
+   * and the img is valid
    */
   public PImageAWT(Image img) {
     format = RGB;
@@ -54,8 +52,8 @@ public class PImageAWT extends PImage {
       width = bi.getWidth();
       height = bi.getHeight();
       int type = bi.getType();
-      if (type == BufferedImage.TYPE_3BYTE_BGR ||
-          type == BufferedImage.TYPE_4BYTE_ABGR) {
+      if (type == BufferedImage.TYPE_3BYTE_BGR
+              || type == BufferedImage.TYPE_4BYTE_ABGR) {
         pixels = new int[width * height];
         bi.getRGB(0, 0, width, height, pixels, 0, width);
         if (type == BufferedImage.TYPE_4BYTE_ABGR) {
@@ -81,27 +79,26 @@ public class PImageAWT extends PImage {
       width = img.getWidth(null);
       height = img.getHeight(null);
       pixels = new int[width * height];
-      PixelGrabber pg =
-        new PixelGrabber(img, 0, 0, width, height, pixels, 0, width);
+      PixelGrabber pg
+              = new PixelGrabber(img, 0, 0, width, height, pixels, 0, width);
       try {
         pg.grabPixels();
-      } catch (InterruptedException e) { }
+      } catch (InterruptedException e) {
+      }
     }
     pixelDensity = 1;
     pixelWidth = width;
     pixelHeight = height;
   }
 
-
   /**
    * Use the getNative() method instead, which allows library interfaces to be
-   * written in a cross-platform fashion for desktop, Android, and others.
-   * This is still included for PGraphics objects, which may need the image.
+   * written in a cross-platform fashion for desktop, Android, and others. This
+   * is still included for PGraphics objects, which may need the image.
    */
   public Image getImage() {  // ignore
     return (Image) getNative();
   }
-
 
   /**
    * Returns a native BufferedImage from this PImage.
@@ -109,14 +106,13 @@ public class PImageAWT extends PImage {
   @Override
   public Object getNative() {  // ignore
     loadPixels();
-    int type = (format == RGB) ?
-      BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
+    int type = (format == RGB)
+            ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
     BufferedImage image = new BufferedImage(pixelWidth, pixelHeight, type);
     WritableRaster wr = image.getRaster();
     wr.setDataElements(0, 0, pixelWidth, pixelHeight, pixels);
     return image;
   }
-
 
   @Override
   public void resize(int w, int h) {  // ignore
@@ -132,8 +128,8 @@ public class PImageAWT extends PImage {
       h = (int) (height * diff);
     }
 
-    BufferedImage img =
-      shrinkImage((BufferedImage) getNative(), w*pixelDensity, h*pixelDensity);
+    BufferedImage img
+            = shrinkImage((BufferedImage) getNative(), w * pixelDensity, h * pixelDensity);
 
     PImage temp = new PImageAWT(img);
     this.pixelWidth = temp.width;
@@ -149,16 +145,15 @@ public class PImageAWT extends PImage {
     updatePixels();
   }
 
-
   // Adapted from getFasterScaledInstance() method from page 111 of
   // "Filthy Rich Clients" by Chet Haase and Romain Guy
   // Additional modifications and simplifications have been added,
   // plus a fix to deal with an infinite loop if images are expanded.
   // http://code.google.com/p/processing/issues/detail?id=1463
   static private BufferedImage shrinkImage(BufferedImage img,
-                                           int targetWidth, int targetHeight) {
-    int type = (img.getTransparency() == Transparency.OPAQUE) ?
-      BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
+          int targetWidth, int targetHeight) {
+    int type = (img.getTransparency() == Transparency.OPAQUE)
+            ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
     BufferedImage outgoing = img;
     BufferedImage scratchImage = null;
     Graphics2D g2 = null;
@@ -196,19 +191,18 @@ public class PImageAWT extends PImage {
         g2 = scratchImage.createGraphics();
       }
       g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-                          RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+              RenderingHints.VALUE_INTERPOLATION_BILINEAR);
       g2.drawImage(outgoing, 0, 0, w, h, 0, 0, prevW, prevH, null);
       prevW = w;
       prevH = h;
       outgoing = scratchImage;
     } while (w != targetWidth || h != targetHeight);
-      g2.dispose();
-
+    g2.dispose();
 
     // If we used a scratch buffer that is larger than our target size,
     // create an image of the right size and copy the results into it
-    if (targetWidth != outgoing.getWidth() ||
-        targetHeight != outgoing.getHeight()) {
+    if (targetWidth != outgoing.getWidth()
+            || targetHeight != outgoing.getHeight()) {
       scratchImage = new BufferedImage(targetWidth, targetHeight, type);
       g2 = scratchImage.createGraphics();
       g2.drawImage(outgoing, 0, 0, null);
@@ -218,7 +212,6 @@ public class PImageAWT extends PImage {
     return outgoing;
   }
 
-
   @Override
   protected boolean saveImpl(String filename) {
     if (saveImageFormats == null) {
@@ -226,29 +219,27 @@ public class PImageAWT extends PImage {
     }
     try {
       if (saveImageFormats != null) {
-          for (String saveImageFormat : saveImageFormats) {
-              if (filename.endsWith("." + saveImageFormat)) {
-                  if (!saveImageIO(filename)) {
-                      System.err.println("Error while saving image.");
-                      return false;
-                  }
-                  return true;
-              }
+        for (String saveImageFormat : saveImageFormats) {
+          if (filename.endsWith("." + saveImageFormat)) {
+            if (!saveImageIO(filename)) {
+              System.err.println("Error while saving image.");
+              return false;
+            }
+            return true;
           }
+        }
       }
     } catch (IOException e) {
     }
     return false;
   }
 
-
   protected String[] saveImageFormats;
 
-
   /**
-   * Use ImageIO functions from Java 1.4 and later to handle image save.
-   * Various formats are supported, typically jpeg, png, bmp, and wbmp.
-   * To get a list of the supported formats for writing, use: <BR>
+   * Use ImageIO functions from Java 1.4 and later to handle image save. Various
+   * formats are supported, typically jpeg, png, bmp, and wbmp. To get a list of
+   * the supported formats for writing, use: <BR>
    * <TT>println(javax.imageio.ImageIO.getReaderFormatNames())</TT>
    */
   protected boolean saveImageIO(String path) throws IOException {

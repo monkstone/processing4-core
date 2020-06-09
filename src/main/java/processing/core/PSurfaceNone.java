@@ -1,6 +1,6 @@
 /* -*- mode: java; c-basic-offset: 2; indent-tabs-mode: nil -*- */
 
-/*
+ /*
   Part of the Processing project - http://processing.org
 
   Copyright (c) 2015 The Processing Foundation
@@ -18,8 +18,7 @@
   Public License along with this library; if not, write to the
   Free Software Foundation, Inc., 59 Temple Place, Suite 330,
   Boston, MA  02111-1307  USA
-*/
-
+ */
 package processing.core;
 
 import java.io.File;
@@ -31,6 +30,7 @@ import processing.awt.ShimAWT;
  * class for other drawing surfaces. It includes the standard rendering loop.
  */
 public class PSurfaceNone implements PSurface {
+
   protected PApplet sketch;
   protected PGraphics graphics;
 
@@ -41,45 +41,37 @@ public class PSurfaceNone implements PSurface {
   protected float frameRateTarget = 60;
   protected long frameRatePeriod = 1000000000L / 60L;
 
-
   public PSurfaceNone(PGraphics graphics) {
     this.graphics = graphics;
   }
-
 
   public int displayDensity() {
     return 1;
   }
 
-
   public int displayDensity(int display) {
     return 1;
   }
-
 
   @Override
   public PImage loadImage(String path, Object... args) {
     return ShimAWT.loadImage(sketch, path, args);
   }
 
-
   @Override
   public void selectInput(String prompt, String callback, File file,
-                          Object callbackObject) {
+          Object callbackObject) {
   }
-
 
   @Override
   public void selectOutput(String prompt, String callback, File file,
-                           Object callbackObject) {
+          Object callbackObject) {
   }
-
 
   @Override
   public void selectFolder(String prompt, String callback, File file,
-                           Object callbackObject) {
+          Object callbackObject) {
   }
-
 
   @Override
   public void initOffscreen(PApplet sketch) {
@@ -88,75 +80,69 @@ public class PSurfaceNone implements PSurface {
     setSize(sketch.sketchWidth(), sketch.sketchHeight());
   }
 
-
 //  public Component initComponent(PApplet sketch) {
 //    return null;
 //  }
-
-
   @Override
   public void initFrame(PApplet sketch) {
-    throw new IllegalStateException("initFrame() not available with " +
-                                    getClass().getSimpleName());
+    throw new IllegalStateException("initFrame() not available with "
+            + getClass().getSimpleName());
   }
-
 
   public Object getNative() {
     return null;
   }
 
-
-  /** Set the window (and dock, or whatever necessary) title. */
+  /**
+   * Set the window (and dock, or whatever necessary) title.
+   */
   @Override
   public void setTitle(String title) {
     // You're in a utopian PSurface implementation where titles don't exist.
   }
-
 
   @Override
   public void setIcon(PImage image) {
     // I ain't visible, man.
   }
 
-
-  /** Show or hide the window. */
+  /**
+   * Show or hide the window.
+   */
   @Override
   public void setVisible(boolean visible) {
     // I'm always invisible. You can't catch me.
   }
 
-
-  /** Set true if we want to resize things (default is not resizable) */
+  /**
+   * Set true if we want to resize things (default is not resizable)
+   */
   @Override
   public void setResizable(boolean resizable) {
     // I don't need size to know my worth.
   }
 
+  @Override
+  public void placeWindow(int[] location, int[] editorLocation) {
+  }
 
   @Override
-  public void placeWindow(int[] location, int[] editorLocation) { }
-
-
-  @Override
-  public void placePresent(int stopColor) { }
-
+  public void placePresent(int stopColor) {
+  }
 
   @Override
-  public void setupExternalMessages() { }
-
+  public void setupExternalMessages() {
+  }
 
   @Override
-  public void setAlwaysOnTop(boolean always) { }
-
+  public void setAlwaysOnTop(boolean always) {
+  }
 
   //
-
-
   @Override
   public void setLocation(int x, int y) {
     // I'm everywhere, because I'm nowhere.
   }
-
 
   @Override
   public void setSize(int wide, int high) {
@@ -181,64 +167,53 @@ public class PSurfaceNone implements PSurface {
     graphics.setSize(wide, high);
   }
 
-
 //  public void initImage(PGraphics graphics) {
 //    // TODO Auto-generated method stub
 //
 //  }
-
 //  public Component getComponent() {
 //    return null;
 //  }
-
-
 //  public void setSmooth(int level) {
 //    // TODO Auto-generated method stub
 //  }
-
 //  void requestFocus() {
 //  }
-
 //  public void blit() {
 //    // TODO Auto-generated method stub
 //  }
+  public void setCursor(int kind) {
+  }
 
-  public void setCursor(int kind) { }
+  public void setCursor(PImage image, int hotspotX, int hotspotY) {
+  }
 
-  public void setCursor(PImage image, int hotspotX, int hotspotY) { }
+  public void showCursor() {
+  }
 
-  public void showCursor() { }
-
-  public void hideCursor() { }
-
+  public void hideCursor() {
+  }
 
   //
-
-
   @Override
   public boolean openLink(String url) {
     return false;
   }
 
-
   //
-
-
   public Thread createThread() {
     return new AnimationThread();
   }
-
 
   public void startThread() {
     if (thread == null) {
       thread = createThread();
       thread.start();
     } else {
-      throw new IllegalStateException("Thread already started in " +
-                                      getClass().getSimpleName());
+      throw new IllegalStateException("Thread already started in "
+              + getClass().getSimpleName());
     }
   }
-
 
   public boolean stopThread() {
     if (thread == null) {
@@ -248,18 +223,15 @@ public class PSurfaceNone implements PSurface {
     return true;
   }
 
-
   public boolean isStopped() {
     return thread == null || !thread.isAlive();
   }
-
 
   // sets a flag to pause the thread when ready
   public void pauseThread() {
     PApplet.debug("PApplet.run() paused, calling object wait...");
     paused = true;
   }
-
 
   // halts the animation thread if the pause flag is set
   protected void checkPause() {
@@ -276,7 +248,6 @@ public class PSurfaceNone implements PSurface {
 //    PApplet.debug("done with pause");
   }
 
-
   @Override
   public void resumeThread() {
     paused = false;
@@ -285,14 +256,12 @@ public class PSurfaceNone implements PSurface {
     }
   }
 
-
   @Override
   public void setFrameRate(float fps) {
     frameRateTarget = fps;
     frameRatePeriod = (long) (1000000000.0 / frameRateTarget);
     //g.setFrameRate(fps);
   }
-
 
   public class AnimationThread extends Thread {
 
@@ -307,7 +276,8 @@ public class PSurfaceNone implements PSurface {
 
     /**
      * Main method for the primary animation thread.
-     * <A HREF="http://java.sun.com/products/jfc/tsc/articles/painting/">Painting in AWT and Swing</A>
+     * <A HREF="http://java.sun.com/products/jfc/tsc/articles/painting/">Painting
+     * in AWT and Swing</A>
      */
     @Override
     public void run() {  // not good to make this synchronized, locks things up
@@ -337,8 +307,7 @@ public class PSurfaceNone implements PSurface {
         }
 //        System.out.format("  but now, sketchW/H changed to %d %d%n", sketchWidth, sketchHeight);
       }
-      */
-
+       */
       // un-pause the sketch and get rolling
       sketch.start();
 
@@ -351,7 +320,6 @@ public class PSurfaceNone implements PSurface {
 //        if (currentSize.width != sketchWidth || currentSize.height != sketchHeight) {
 //          System.err.format("need to resize from %s to %d, %d%n", currentSize, sketchWidth, sketchHeight);
 //        }
-
         // render a single frame
 //        try {
 //          EventQueue.invokeAndWait(new Runnable() {
@@ -367,7 +335,6 @@ public class PSurfaceNone implements PSurface {
 //        }
 //          }
 //        });
-
 //            }
 //          });
 //        } catch (InterruptedException ie) {
@@ -375,12 +342,10 @@ public class PSurfaceNone implements PSurface {
 //        } catch (InvocationTargetException ite) {
 //          ite.getTargetException().printStackTrace();
 //        }
-
         // wait for update & paint to happen before drawing next frame
         // this is necessary since the drawing is sometimes in a
         // separate thread, meaning that the next frame will start
         // before the update/paint is completed
-
         long afterTime = System.nanoTime();
         long timeDiff = afterTime - beforeTime;
         //System.out.println("time diff is " + timeDiff);
@@ -390,7 +355,8 @@ public class PSurfaceNone implements PSurface {
           try {
             Thread.sleep(sleepTime / 1000000L, (int) (sleepTime % 1000000L));
             noDelays = 0;  // Got some sleep, not delaying anymore
-          } catch (InterruptedException ex) { }
+          } catch (InterruptedException ex) {
+          }
 
           overSleepTime = (System.nanoTime() - afterTime) - sleepTime;
 

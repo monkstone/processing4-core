@@ -1,6 +1,6 @@
 /* -*- mode: java; c-basic-offset: 2; indent-tabs-mode: nil -*- */
 
-/*
+ /*
   Part of the Processing project - http://processing.org
 
   Copyright (c) 2012-15 The Processing Foundation
@@ -20,8 +20,7 @@
   Public License along with this library; if not, write to the
   Free Software Foundation, Inc., 59 Temple Place, Suite 330,
   Boston, MA  02111-1307  USA
-*/
-
+ */
 package processing.opengl;
 
 import processing.core.PApplet;
@@ -31,17 +30,16 @@ import processing.opengl.PGraphicsOpenGL.GLResourceFrameBuffer;
 import java.nio.IntBuffer;
 
 /**
- * Encapsulates a Frame Buffer Object for offscreen rendering.
- * When created with onscreen == true, it represents the normal
- * framebuffer. Needed by the stack mechanism in OPENGL2 to return
- * to onscreen rendering after a sequence of pushFramebuffer calls.
- * It transparently handles the situations when the FBO extension is
- * not available.
+ * Encapsulates a Frame Buffer Object for offscreen rendering. When created with
+ * onscreen == true, it represents the normal framebuffer. Needed by the stack
+ * mechanism in OPENGL2 to return to onscreen rendering after a sequence of
+ * pushFramebuffer calls. It transparently handles the situations when the FBO
+ * extension is not available.
  *
  * By Andres Colubri.
  */
-
 public class FrameBuffer implements PConstants {
+
   protected PGraphicsOpenGL pg;
   protected PGL pgl;
   protected int context;   // The context that created this framebuffer.
@@ -70,17 +68,15 @@ public class FrameBuffer implements PConstants {
 
   protected IntBuffer pixelBuffer;
 
-
   FrameBuffer(PGraphicsOpenGL pg) {
     this.pg = pg;
     pgl = pg.pgl;
     context = pgl.createEmptyContext();
   }
 
-
   FrameBuffer(PGraphicsOpenGL pg, int w, int h, int samples, int colorBuffers,
-              int depthBits, int stencilBits, boolean packedDepthStencil,
-              boolean screen) {
+          int depthBits, int stencilBits, boolean packedDepthStencil,
+          boolean screen) {
     this(pg);
 
     glFbo = 0;
@@ -140,16 +136,13 @@ public class FrameBuffer implements PConstants {
     pixelBuffer = null;
   }
 
-
   FrameBuffer(PGraphicsOpenGL pg, int w, int h) {
     this(pg, w, h, 1, 1, 0, 0, false, false);
   }
 
-
   FrameBuffer(PGraphicsOpenGL pg, int w, int h, boolean screen) {
     this(pg, w, h, 1, 1, 0, 0, false, screen);
   }
-
 
   public void clear() {
     pg.pushFramebuffer();
@@ -157,9 +150,9 @@ public class FrameBuffer implements PConstants {
     pgl.clearDepth(1);
     pgl.clearStencil(0);
     pgl.clearColor(0, 0, 0, 0);
-    pgl.clear(PGL.DEPTH_BUFFER_BIT |
-              PGL.STENCIL_BUFFER_BIT |
-              PGL.COLOR_BUFFER_BIT);
+    pgl.clear(PGL.DEPTH_BUFFER_BIT
+            | PGL.STENCIL_BUFFER_BIT
+            | PGL.COLOR_BUFFER_BIT);
     pg.popFramebuffer();
   }
 
@@ -179,7 +172,7 @@ public class FrameBuffer implements PConstants {
     pgl.bindFramebufferImpl(PGL.READ_FRAMEBUFFER, this.glFbo);
     pgl.bindFramebufferImpl(PGL.DRAW_FRAMEBUFFER, dest.glFbo);
     pgl.blitFramebuffer(0, 0, this.width, this.height,
-                        0, 0, dest.width, dest.height, mask, PGL.NEAREST);
+            0, 0, dest.width, dest.height, mask, PGL.NEAREST);
     pgl.bindFramebufferImpl(PGL.READ_FRAMEBUFFER, pg.getCurrentFB().glFbo);
     pgl.bindFramebufferImpl(PGL.DRAW_FRAMEBUFFER, pg.getCurrentFB().glFbo);
   }
@@ -204,10 +197,12 @@ public class FrameBuffer implements PConstants {
   }
 
   public void readPixels() {
-    if (pixelBuffer == null) createPixelBuffer();
+    if (pixelBuffer == null) {
+      createPixelBuffer();
+    }
     pixelBuffer.rewind();
     pgl.readPixels(0, 0, width, height, PGL.RGBA, PGL.UNSIGNED_BYTE,
-                   pixelBuffer);
+            pixelBuffer);
   }
 
   public void getPixels(int[] pixels) {
@@ -236,29 +231,26 @@ public class FrameBuffer implements PConstants {
   }
 
   ///////////////////////////////////////////////////////////
-
   // Color buffer setters.
-
-
   public void setColorBuffer(Texture tex) {
-    setColorBuffers(new Texture[] { tex }, 1);
+    setColorBuffers(new Texture[]{tex}, 1);
   }
-
 
   public void setColorBuffers(Texture[] textures) {
     setColorBuffers(textures, textures.length);
   }
 
-
   public void setColorBuffers(Texture[] textures, int n) {
-    if (screenFb) return;
-
-    if (numColorBuffers != PApplet.min(n, textures.length)) {
-      throw new RuntimeException("Wrong number of textures to set the color " +
-                                 "buffers.");
+    if (screenFb) {
+      return;
     }
 
-      System.arraycopy(textures, 0, colorBufferTex, 0, numColorBuffers);
+    if (numColorBuffers != PApplet.min(n, textures.length)) {
+      throw new RuntimeException("Wrong number of textures to set the color "
+              + "buffers.");
+    }
+
+    System.arraycopy(textures, 0, colorBufferTex, 0, numColorBuffers);
 
     pg.pushFramebuffer();
     pg.setFramebuffer(this);
@@ -266,20 +258,19 @@ public class FrameBuffer implements PConstants {
     // Making sure nothing is attached.
     for (int i = 0; i < numColorBuffers; i++) {
       pgl.framebufferTexture2D(PGL.FRAMEBUFFER, PGL.COLOR_ATTACHMENT0 + i,
-                               PGL.TEXTURE_2D, 0, 0);
+              PGL.TEXTURE_2D, 0, 0);
     }
 
     for (int i = 0; i < numColorBuffers; i++) {
       pgl.framebufferTexture2D(PGL.FRAMEBUFFER, PGL.COLOR_ATTACHMENT0 + i,
-                               colorBufferTex[i].glTarget,
-                               colorBufferTex[i].glName, 0);
+              colorBufferTex[i].glTarget,
+              colorBufferTex[i].glName, 0);
     }
 
     pgl.validateFramebuffer();
 
     pg.popFramebuffer();
   }
-
 
   public void swapColorBuffers() {
     for (int i = 0; i < numColorBuffers - 1; i++) {
@@ -293,14 +284,13 @@ public class FrameBuffer implements PConstants {
     pg.setFramebuffer(this);
     for (int i = 0; i < numColorBuffers; i++) {
       pgl.framebufferTexture2D(PGL.FRAMEBUFFER, PGL.COLOR_ATTACHMENT0 + i,
-                               colorBufferTex[i].glTarget,
-                               colorBufferTex[i].glName, 0);
+              colorBufferTex[i].glTarget,
+              colorBufferTex[i].glName, 0);
     }
     pgl.validateFramebuffer();
 
     pg.popFramebuffer();
   }
-
 
   public int getDefaultReadBuffer() {
     if (screenFb) {
@@ -310,7 +300,6 @@ public class FrameBuffer implements PConstants {
     }
   }
 
-
   public int getDefaultDrawBuffer() {
     if (screenFb) {
       return pgl.getDefaultDrawBuffer();
@@ -319,12 +308,8 @@ public class FrameBuffer implements PConstants {
     }
   }
 
-
   ///////////////////////////////////////////////////////////
-
   // Allocate/release framebuffer.
-
-
   protected void allocate() {
     dispose(); // Just in the case this object is being re-allocated.
 
@@ -351,9 +336,10 @@ public class FrameBuffer implements PConstants {
     }
   }
 
-
   protected void dispose() {
-    if (screenFb) return;
+    if (screenFb) {
+      return;
+    }
     if (glres != null) {
       glres.dispose();
       glFbo = 0;
@@ -365,9 +351,10 @@ public class FrameBuffer implements PConstants {
     }
   }
 
-
   protected boolean contextIsOutdated() {
-    if (screenFb) return false;
+    if (screenFb) {
+      return false;
+    }
 
     boolean outdated = !pgl.contextIsCurrent(context);
     if (outdated) {
@@ -379,25 +366,27 @@ public class FrameBuffer implements PConstants {
     return outdated;
   }
 
-
   protected void initColorBufferMultisample() {
-    if (screenFb) return;
+    if (screenFb) {
+      return;
+    }
 
     pg.pushFramebuffer();
     pg.setFramebuffer(this);
 
     pgl.bindRenderbuffer(PGL.RENDERBUFFER, glMultisample);
     pgl.renderbufferStorageMultisample(PGL.RENDERBUFFER, nsamples,
-                                       PGL.RGBA8, width, height);
+            PGL.RGBA8, width, height);
     pgl.framebufferRenderbuffer(PGL.FRAMEBUFFER, PGL.COLOR_ATTACHMENT0,
-                                PGL.RENDERBUFFER, glMultisample);
+            PGL.RENDERBUFFER, glMultisample);
 
     pg.popFramebuffer();
   }
 
-
   protected void initPackedDepthStencilBuffer() {
-    if (screenFb) return;
+    if (screenFb) {
+      return;
+    }
 
     if (width == 0 || height == 0) {
       throw new RuntimeException("PFramebuffer: size undefined.");
@@ -410,23 +399,24 @@ public class FrameBuffer implements PConstants {
 
     if (multisample) {
       pgl.renderbufferStorageMultisample(PGL.RENDERBUFFER, nsamples,
-                                         PGL.DEPTH24_STENCIL8, width, height);
+              PGL.DEPTH24_STENCIL8, width, height);
     } else {
       pgl.renderbufferStorage(PGL.RENDERBUFFER, PGL.DEPTH24_STENCIL8,
-                              width, height);
+              width, height);
     }
 
     pgl.framebufferRenderbuffer(PGL.FRAMEBUFFER, PGL.DEPTH_ATTACHMENT,
-                                PGL.RENDERBUFFER, glDepthStencil);
+            PGL.RENDERBUFFER, glDepthStencil);
     pgl.framebufferRenderbuffer(PGL.FRAMEBUFFER, PGL.STENCIL_ATTACHMENT,
-                                PGL.RENDERBUFFER, glDepthStencil);
+            PGL.RENDERBUFFER, glDepthStencil);
 
     pg.popFramebuffer();
   }
 
-
   protected void initDepthBuffer() {
-    if (screenFb) return;
+    if (screenFb) {
+      return;
+    }
 
     if (width == 0 || height == 0) {
       throw new RuntimeException("PFramebuffer: size undefined.");
@@ -438,36 +428,37 @@ public class FrameBuffer implements PConstants {
     pgl.bindRenderbuffer(PGL.RENDERBUFFER, glDepth);
 
     int glConst = PGL.DEPTH_COMPONENT16;
-      switch (depthBits) {
-          case 16:
-              glConst = PGL.DEPTH_COMPONENT16;
-              break;
-          case 24:
-              glConst = PGL.DEPTH_COMPONENT24;
-              break;
-          case 32:
-              glConst = PGL.DEPTH_COMPONENT32;
-              break;
-          default:
-              break;
-      }
+    switch (depthBits) {
+      case 16:
+        glConst = PGL.DEPTH_COMPONENT16;
+        break;
+      case 24:
+        glConst = PGL.DEPTH_COMPONENT24;
+        break;
+      case 32:
+        glConst = PGL.DEPTH_COMPONENT32;
+        break;
+      default:
+        break;
+    }
 
     if (multisample) {
       pgl.renderbufferStorageMultisample(PGL.RENDERBUFFER, nsamples, glConst,
-                                         width, height);
+              width, height);
     } else {
       pgl.renderbufferStorage(PGL.RENDERBUFFER, glConst, width, height);
     }
 
     pgl.framebufferRenderbuffer(PGL.FRAMEBUFFER, PGL.DEPTH_ATTACHMENT,
-                                PGL.RENDERBUFFER, glDepth);
+            PGL.RENDERBUFFER, glDepth);
 
     pg.popFramebuffer();
   }
 
-
   protected void initStencilBuffer() {
-    if (screenFb) return;
+    if (screenFb) {
+      return;
+    }
 
     if (width == 0 || height == 0) {
       throw new RuntimeException("PFramebuffer: size undefined.");
@@ -479,32 +470,31 @@ public class FrameBuffer implements PConstants {
     pgl.bindRenderbuffer(PGL.RENDERBUFFER, glStencil);
 
     int glConst = PGL.STENCIL_INDEX1;
-      switch (stencilBits) {
-          case 1:
-              glConst = PGL.STENCIL_INDEX1;
-              break;
-          case 4:
-              glConst = PGL.STENCIL_INDEX4;
-              break;
-          case 8:
-              glConst = PGL.STENCIL_INDEX8;
-              break;
-          default:
-              break;
-      }
+    switch (stencilBits) {
+      case 1:
+        glConst = PGL.STENCIL_INDEX1;
+        break;
+      case 4:
+        glConst = PGL.STENCIL_INDEX4;
+        break;
+      case 8:
+        glConst = PGL.STENCIL_INDEX8;
+        break;
+      default:
+        break;
+    }
     if (multisample) {
       pgl.renderbufferStorageMultisample(PGL.RENDERBUFFER, nsamples, glConst,
-                                         width, height);
+              width, height);
     } else {
       pgl.renderbufferStorage(PGL.RENDERBUFFER, glConst, width, height);
     }
 
     pgl.framebufferRenderbuffer(PGL.FRAMEBUFFER, PGL.STENCIL_ATTACHMENT,
-                                PGL.RENDERBUFFER, glStencil);
+            PGL.RENDERBUFFER, glStencil);
 
     pg.popFramebuffer();
   }
-
 
   protected void createPixelBuffer() {
     pixelBuffer = IntBuffer.allocate(width * height);

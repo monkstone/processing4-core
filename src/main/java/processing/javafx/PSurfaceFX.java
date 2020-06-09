@@ -28,9 +28,9 @@ public class PSurfaceFX implements PSurface {
 
   final String message;
 
-    public PSurfaceFX() {
-        this.message = "FX2D renderer not supported on linux-aarch64";
-    }
+  public PSurfaceFX() {
+    this.message = "FX2D renderer not supported on linux-aarch64";
+  }
 
   @Override
   public void initOffscreen(PApplet sketch) {
@@ -147,29 +147,29 @@ public class PSurfaceFX implements PSurface {
     throw new UnsupportedOperationException(message);
   }
 
-    @Override
-    public PImage loadImage(String path, Object... args) {
-        throw new UnsupportedOperationException(message); //To change body of generated methods, choose Tools | Templates.
-    }
+  @Override
+  public PImage loadImage(String path, Object... args) {
+    throw new UnsupportedOperationException(message); //To change body of generated methods, choose Tools | Templates.
+  }
 
-    @Override
-    public void selectInput(String prompt, String callback, File file, Object callbackObject) {
-        throw new UnsupportedOperationException(message); //To change body of generated methods, choose Tools | Templates.
-    }
+  @Override
+  public void selectInput(String prompt, String callback, File file, Object callbackObject) {
+    throw new UnsupportedOperationException(message); //To change body of generated methods, choose Tools | Templates.
+  }
 
-    @Override
-    public void selectOutput(String prompt, String callback, File file, Object callbackObject) {
-        throw new UnsupportedOperationException(message); //To change body of generated methods, choose Tools | Templates.
-    }
+  @Override
+  public void selectOutput(String prompt, String callback, File file, Object callbackObject) {
+    throw new UnsupportedOperationException(message); //To change body of generated methods, choose Tools | Templates.
+  }
 
-    @Override
-    public void selectFolder(String prompt, String callback, File file, Object callbackObject) {
-        throw new UnsupportedOperationException(message); //To change body of generated methods, choose Tools | Templates.
-    }
+  @Override
+  public void selectFolder(String prompt, String callback, File file, Object callbackObject) {
+    throw new UnsupportedOperationException(message); //To change body of generated methods, choose Tools | Templates.
+  }
 
-    @Override
-    public boolean openLink(String url) {
-        throw new UnsupportedOperationException(message); //To change body of generated methods, choose Tools | Templates.
-    }
+  @Override
+  public boolean openLink(String url) {
+    throw new UnsupportedOperationException(message); //To change body of generated methods, choose Tools | Templates.
+  }
 
 }

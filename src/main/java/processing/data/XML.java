@@ -1,6 +1,6 @@
 /* -*- mode: java; c-basic-offset: 2; indent-tabs-mode: nil -*- */
 
-/*
+ /*
   Part of the Processing project - http://processing.org
 
   Copyright (c) 2012 The Processing Foundation
@@ -19,8 +19,7 @@
   Public License along with this library; if not, write to the
   Free Software Foundation, Inc., 59 Temple Place, Suite 330,
   Boston, MA  02111-1307  USA
-*/
-
+ */
 package processing.data;
 
 import java.io.*;
@@ -39,10 +38,9 @@ import javax.xml.xpath.XPathFactory;
 
 import processing.core.PApplet;
 
-
 /**
- * This is the base class used for the Processing XML library,
- * representing a single node of an XML tree.
+ * This is the base class used for the Processing XML library, representing a
+ * single node of an XML tree.
  *
  * @webref data:composite
  * @see PApplet#loadXML(String)
@@ -51,23 +49,28 @@ import processing.core.PApplet;
  */
 public class XML implements Serializable {
 
-  /** The internal representation, a DOM node. */
+  /**
+   * The internal representation, a DOM node.
+   */
   protected Node node;
 
 //  /** Cached locally because it's used often. */
 //  protected String name;
-
-  /** The parent element. */
+  /**
+   * The parent element.
+   */
   protected XML parent;
 
-  /** Child elements, once loaded. */
+  /**
+   * Child elements, once loaded.
+   */
   protected XML[] children;
 
   /**
    * @nowebref
    */
-  protected XML() { }
-
+  protected XML() {
+  }
 
 //  /**
 //   * Begin parsing XML data passed in from a PApplet. This code
@@ -81,8 +84,6 @@ public class XML implements Serializable {
 //  public XML(PApplet parent, String filename) throws IOException, ParserConfigurationException, SAXException {
 //    this(parent.createReader(filename));
 //  }
-
-
   /**
    * Advanced users only; use loadXML() in PApplet. This is not a supported
    * function and is subject to change. It is available simply for users that
@@ -93,7 +94,6 @@ public class XML implements Serializable {
   public XML(File file) throws IOException, ParserConfigurationException, SAXException {
     this(file, null);
   }
-
 
   /**
    * Advanced users only; use loadXML() in PApplet.
@@ -111,10 +111,9 @@ public class XML implements Serializable {
     this(input, null);
   }
 
-
   /**
-   * Unlike the loadXML() method in PApplet, this version works with files
-   * that are not in UTF-8 format.
+   * Unlike the loadXML() method in PApplet, this version works with files that
+   * are not in UTF-8 format.
    *
    * @nowebref
    */
@@ -135,7 +134,6 @@ public class XML implements Serializable {
     node = document.getDocumentElement();
   }
 
-
   /**
    * Advanced users only; use loadXML() in PApplet.
    *
@@ -145,14 +143,13 @@ public class XML implements Serializable {
     this(reader, null);
   }
 
-
   /**
    * Advanced users only; use loadXML() in PApplet.
    *
    * Added extra code to handle \u2028 (Unicode NLF), which is sometimes
-   * inserted by web browsers (Safari?) and not distinguishable from a "real"
-   * LF (or CRLF) in some text editors (i.e. TextEdit on OS X). Only doing
-   * this for XML (and not all Reader objects) because LFs are essential.
+   * inserted by web browsers (Safari?) and not distinguishable from a "real" LF
+   * (or CRLF) in some text editors (i.e. TextEdit on OS X). Only doing this for
+   * XML (and not all Reader objects) because LFs are essential.
    * https://github.com/processing/processing/issues/2100
    *
    * @nowebref
@@ -169,7 +166,6 @@ public class XML implements Serializable {
 
     // without a validating DTD, this doesn't do anything since it doesn't know what is ignorable
 //      factory.setIgnoringElementContentWhitespace(true);
-
     factory.setExpandEntityReferences(false);
 //      factory.setExpandEntityReferences(true);
 
@@ -181,18 +177,16 @@ public class XML implements Serializable {
 //      SAXParserFactory spf = SAXParserFactory.newInstance();
 //      spf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
 //      SAXParser p = spf.newSAXParser();
-
     //    builder = DocumentBuilderFactory.newDocumentBuilder();
     //    builder = new SAXBuilder();
     //    builder.setValidation(validating);
-
     Document document = builder.parse(new InputSource(new Reader() {
       @Override
       public int read(char[] cbuf, int off, int len) throws IOException {
         int count = reader.read(cbuf, off, len);
         for (int i = 0; i < count; i++) {
-          if (cbuf[off+i] == '\u2028') {
-            cbuf[off+i] = '\n';
+          if (cbuf[off + i] == '\u2028') {
+            cbuf[off + i] = '\n';
           }
         }
         return count;
@@ -205,7 +199,6 @@ public class XML implements Serializable {
     }));
     node = document.getDocumentElement();
   }
-
 
   /**
    * @param name creates a node with this name
@@ -245,7 +238,6 @@ public class XML implements Serializable {
     }
   }
 
-
   /**
    * @webref xml:method
    * @brief Converts String content to an XML object
@@ -267,16 +259,12 @@ public class XML implements Serializable {
     return new XML(new StringReader(data), null);
   }
 
-
 //  protected boolean save(OutputStream output) {
 //    return write(PApplet.createWriter(output));
 //  }
-
-
   public boolean save(File file) {
     return save(file, null);
   }
-
 
   public boolean save(File file, String options) {
     PrintWriter writer = PApplet.createWriter(file);
@@ -286,7 +274,6 @@ public class XML implements Serializable {
     return result;
   }
 
-
   // Sends this object and its kids to a Writer with an indent of 2 spaces,
   // including the declaration at the top so that the output will be valid XML.
   public boolean write(PrintWriter output) {
@@ -295,10 +282,8 @@ public class XML implements Serializable {
     return true;
   }
 
-
   /**
-   * Returns the parent element. This method returns null for the root
-   * element.
+   * Returns the parent element. This method returns null for the root element.
    *
    * @webref xml:method
    * @brief Gets a copy of the element's parent
@@ -313,7 +298,6 @@ public class XML implements Serializable {
   protected Object getNative() {
     return node;
   }
-
 
   /**
    * Returns the full name (i.e. the name including an eventual namespace
@@ -338,7 +322,6 @@ public class XML implements Serializable {
 //    name = node.getNodeName();
   }
 
-
   /**
    * Returns the name of the element (without namespace prefix).
    *
@@ -347,7 +330,6 @@ public class XML implements Serializable {
   public String getLocalName() {
     return node.getLocalName();
   }
-
 
   /**
    * Honey, can you just check on the kids? Thanks.
@@ -365,7 +347,6 @@ public class XML implements Serializable {
     }
   }
 
-
   /**
    * Returns the number of children.
    *
@@ -378,7 +359,6 @@ public class XML implements Serializable {
     return children.length;
   }
 
-
   /**
    * Returns a boolean of whether or not there are children.
    *
@@ -390,10 +370,9 @@ public class XML implements Serializable {
     return children.length > 0;
   }
 
-
   /**
-   * Put the names of all children into an array. Same as looping through
-   * each child and calling getName() on each XMLElement.
+   * Put the names of all children into an array. Same as looping through each
+   * child and calling getName() on each XMLElement.
    *
    * @webref xml:method
    * @brief Returns the names of all children as an array
@@ -416,7 +395,6 @@ public class XML implements Serializable {
     return outgoing;
   }
 
-
   /**
    * Returns an array containing all the child elements.
    *
@@ -436,7 +414,6 @@ public class XML implements Serializable {
     return children;
   }
 
-
   /**
    * Quick accessor for an element at a particular index.
    *
@@ -447,7 +424,6 @@ public class XML implements Serializable {
     checkChildren();
     return children[index];
   }
-
 
   /**
    * Get a child by its name or path.
@@ -473,7 +449,6 @@ public class XML implements Serializable {
     return null;
   }
 
-
   /**
    * Internal helper function for getChild(String).
    *
@@ -486,10 +461,10 @@ public class XML implements Serializable {
     // if it's a number, do an index instead
     if (Character.isDigit(items[offset].charAt(0))) {
       XML kid = getChild(Integer.parseInt(items[offset]));
-      if (offset == items.length-1) {
+      if (offset == items.length - 1) {
         return kid;
       } else {
-        return kid.getChildRecursive(items, offset+1);
+        return kid.getChildRecursive(items, offset + 1);
       }
     }
     int childCount = getChildCount();
@@ -497,20 +472,19 @@ public class XML implements Serializable {
       XML kid = getChild(i);
       String kidName = kid.getName();
       if (kidName != null && kidName.equals(items[offset])) {
-        if (offset == items.length-1) {
+        if (offset == items.length - 1) {
           return kid;
         } else {
-          return kid.getChildRecursive(items, offset+1);
+          return kid.getChildRecursive(items, offset + 1);
         }
       }
     }
     return null;
   }
 
-
   /**
-   * Get any children that match this name or path. Similar to getChild(),
-   * but will grab multiple matches rather than only the first.
+   * Get any children that match this name or path. Similar to getChild(), but
+   * will grab multiple matches rather than only the first.
    *
    * @param name element name or path/to/element
    * @return array of child elements that match
@@ -526,7 +500,7 @@ public class XML implements Serializable {
     // if it's a number, do an index instead
     // (returns a single element array, since this will be a single match
     if (Character.isDigit(name.charAt(0))) {
-      return new XML[] { getChild(Integer.parseInt(name)) };
+      return new XML[]{getChild(Integer.parseInt(name))};
     }
     int childCount = getChildCount();
     XML[] matches = new XML[childCount];
@@ -541,20 +515,18 @@ public class XML implements Serializable {
     return (XML[]) PApplet.subset(matches, 0, matchCount);
   }
 
-
   protected XML[] getChildrenRecursive(String[] items, int offset) {
-    if (offset == items.length-1) {
+    if (offset == items.length - 1) {
       return getChildren(items[offset]);
     }
     XML[] matches = getChildren(items[offset]);
     XML[] outgoing = new XML[0];
     for (int i = 0; i < matches.length; i++) {
-      XML[] kidMatches = matches[i].getChildrenRecursive(items, offset+1);
+      XML[] kidMatches = matches[i].getChildrenRecursive(items, offset + 1);
       outgoing = (XML[]) PApplet.concat(outgoing, kidMatches);
     }
     return outgoing;
   }
-
 
   /**
    * @webref xml:method
@@ -566,24 +538,23 @@ public class XML implements Serializable {
     return appendChild(newChild);
   }
 
-
   public XML addChild(XML child) {
     Document document = node.getOwnerDocument();
     Node newChild = document.importNode((Node) child.getNative(), true);
     return appendChild(newChild);
   }
 
-
-  /** Internal handler to add the node structure. */
+  /**
+   * Internal handler to add the node structure.
+   */
   protected XML appendChild(Node newNode) {
     node.appendChild(newNode);
     XML newbie = new XML(this, newNode);
     if (children != null) {
-      children = (XML[]) PApplet.concat(children, new XML[] { newbie });
+      children = (XML[]) PApplet.concat(children, new XML[]{newbie});
     }
     return newbie;
   }
-
 
   /**
    * @webref xml:method
@@ -595,20 +566,19 @@ public class XML implements Serializable {
   }
 
   /**
-   * Removes whitespace nodes.
-   * Those whitespace nodes are required to reconstruct the original XML's spacing and indentation.
-   * If you call this and use saveXML() your original spacing will be gone.
-   * 
+   * Removes whitespace nodes. Those whitespace nodes are required to
+   * reconstruct the original XML's spacing and indentation. If you call this
+   * and use saveXML() your original spacing will be gone.
+   *
    * @nowebref
    * @brief Removes whitespace nodes
    */
   public void trim() {
     try {
       XPathFactory xpathFactory = XPathFactory.newInstance();
-      XPathExpression xpathExp =
-        xpathFactory.newXPath().compile("//text()[normalize-space(.) = '']");
-      NodeList emptyTextNodes = (NodeList)
-        xpathExp.evaluate(node, XPathConstants.NODESET);
+      XPathExpression xpathExp
+              = xpathFactory.newXPath().compile("//text()[normalize-space(.) = '']");
+      NodeList emptyTextNodes = (NodeList) xpathExp.evaluate(node, XPathConstants.NODESET);
 
       // Remove each empty text node from document.
       for (int i = 0; i < emptyTextNodes.getLength(); i++) {
@@ -619,7 +589,6 @@ public class XML implements Serializable {
       throw new RuntimeException(e);
     }
   }
-
 
 //  /** Remove whitespace nodes. */
 //  public void trim() {
@@ -668,8 +637,6 @@ public class XML implements Serializable {
 ////     </xsl:template>
 ////   </xsl:stylesheet>
 //  }
-
-
   /**
    * Returns the number of attributes.
    *
@@ -679,7 +646,6 @@ public class XML implements Serializable {
   public int getAttributeCount() {
     return node.getAttributes().getLength();
   }
-
 
   /**
    * Get a list of the names for all of the attributes for this node.
@@ -706,7 +672,6 @@ public class XML implements Serializable {
     return (node.getAttributes().getNamedItem(name) != null);
   }
 
-
   /**
    * Returns the value of an attribute.
    *
@@ -716,8 +681,6 @@ public class XML implements Serializable {
 //  public String getAttribute(String name) {
 //    return this.getAttribute(name, null);
 //  }
-
-
   /**
    * Returns the value of an attribute.
    *
@@ -729,8 +692,6 @@ public class XML implements Serializable {
 //    Node attr = node.getAttributes().getNamedItem(name);
 //    return (attr == null) ? defaultValue : attr.getNodeValue();
 //  }
-
-
   /**
    * @webref xml:method
    * @brief Gets the content of an attribute as a String
@@ -738,7 +699,6 @@ public class XML implements Serializable {
   public String getString(String name) {
     return getString(name, null);
   }
-
 
   public String getString(String name, String defaultValue) {
     NamedNodeMap attrs = node.getAttributes();
@@ -751,7 +711,6 @@ public class XML implements Serializable {
     return defaultValue;
   }
 
-
   /**
    * @webref xml:method
    * @brief Sets the content of an attribute as a String
@@ -759,7 +718,6 @@ public class XML implements Serializable {
   public void setString(String name, String value) {
     ((Element) node).setAttribute(name, value);
   }
-
 
   /**
    * @webref xml:method
@@ -769,7 +727,6 @@ public class XML implements Serializable {
     return getInt(name, 0);
   }
 
-
   /**
    * @webref xml:method
    * @brief Sets the content of an attribute as an int
@@ -777,7 +734,6 @@ public class XML implements Serializable {
   public void setInt(String name, int value) {
     setString(name, String.valueOf(value));
   }
-
 
   /**
    * Returns the value of an attribute.
@@ -791,7 +747,6 @@ public class XML implements Serializable {
     return (value == null) ? defaultValue : Integer.parseInt(value);
   }
 
-
   /**
    * @webref xml:method
    * @brief Sets the content of an element as an int
@@ -799,7 +754,6 @@ public class XML implements Serializable {
   public void setLong(String name, long value) {
     setString(name, String.valueOf(value));
   }
-
 
   /**
    * Returns the value of an attribute.
@@ -813,7 +767,6 @@ public class XML implements Serializable {
     return (value == null) ? defaultValue : Long.parseLong(value);
   }
 
-
   /**
    * Returns the value of an attribute, or zero if not present.
    *
@@ -823,7 +776,6 @@ public class XML implements Serializable {
   public float getFloat(String name) {
     return getFloat(name, 0);
   }
-
 
   /**
    * Returns the value of an attribute.
@@ -837,7 +789,6 @@ public class XML implements Serializable {
     return (value == null) ? defaultValue : Float.parseFloat(value);
   }
 
-
   /**
    * @webref xml:method
    * @brief Sets the content of an attribute as a float
@@ -846,11 +797,9 @@ public class XML implements Serializable {
     setString(name, String.valueOf(value));
   }
 
-
   public double getDouble(String name) {
     return getDouble(name, 0);
   }
-
 
   /**
    * Returns the value of an attribute.
@@ -864,17 +813,14 @@ public class XML implements Serializable {
     return (value == null) ? defaultValue : Double.parseDouble(value);
   }
 
-
   public void setDouble(String name, double value) {
     setString(name, String.valueOf(value));
   }
 
-
   /**
-   * Return the #PCDATA content of the element. If the element has a
-   * combination of #PCDATA content and child elements, the #PCDATA
-   * sections can be retrieved as unnamed child objects. In this case,
-   * this method returns null.
+   * Return the #PCDATA content of the element. If the element has a combination
+   * of #PCDATA content and child elements, the #PCDATA sections can be
+   * retrieved as unnamed child objects. In this case, this method returns null.
    *
    * @webref xml:method
    * @brief Gets the content of an element
@@ -886,12 +832,10 @@ public class XML implements Serializable {
     return node.getTextContent();
   }
 
-
   public String getContent(String defaultValue) {
     String s = node.getTextContent();
     return (s != null) ? s : defaultValue;
   }
-
 
   /**
    * @webref xml:method
@@ -904,14 +848,12 @@ public class XML implements Serializable {
     return getIntContent(0);
   }
 
-
   /**
    * @param defaultValue the default value of the attribute
    */
   public int getIntContent(int defaultValue) {
     return PApplet.parseInt(node.getTextContent(), defaultValue);
   }
-
 
   /**
    * @webref xml:method
@@ -924,7 +866,6 @@ public class XML implements Serializable {
     return getFloatContent(0);
   }
 
-
   /**
    * @param defaultValue the default value of the attribute
    */
@@ -932,38 +873,35 @@ public class XML implements Serializable {
     return PApplet.parseFloat(node.getTextContent(), defaultValue);
   }
 
-
   public long getLongContent() {
     return getLongContent(0);
   }
-
 
   public long getLongContent(long defaultValue) {
     String c = node.getTextContent();
     if (c != null) {
       try {
         return Long.parseLong(c);
-      } catch (NumberFormatException nfe) { }
+      } catch (NumberFormatException nfe) {
+      }
     }
     return defaultValue;
   }
 
-
   public double getDoubleContent() {
     return getDoubleContent(0);
   }
-
 
   public double getDoubleContent(double defaultValue) {
     String c = node.getTextContent();
     if (c != null) {
       try {
         return Double.parseDouble(c);
-      } catch (NumberFormatException nfe) { }
+      } catch (NumberFormatException nfe) {
+      }
     }
     return defaultValue;
   }
-
 
   /**
    * @webref xml:method
@@ -973,33 +911,29 @@ public class XML implements Serializable {
     node.setTextContent(text);
   }
 
-
   public void setIntContent(int value) {
     setContent(String.valueOf(value));
   }
-
 
   public void setFloatContent(float value) {
     setContent(String.valueOf(value));
   }
 
-
   public void setLongContent(long value) {
     setContent(String.valueOf(value));
   }
 
-
   public void setDoubleContent(double value) {
     setContent(String.valueOf(value));
   }
-
 
   /**
    * Format this XML data as a String.
    *
    * @webref xml:method
    * @brief Formats XML data as a String
-   * @param indent -1 for a single line (and no declaration), >= 0 for indents and newlines
+   * @param indent -1 for a single line (and no declaration), >= 0 for indents
+   * and newlines
    * @return the content
    * @see XML#toString()
    */
@@ -1026,16 +960,13 @@ public class XML implements Serializable {
       }
 
 //      transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "sample.dtd");
-
       transformer.setOutputProperty(OutputKeys.METHOD, "xml");
 
 //      transformer.setOutputProperty(OutputKeys.CDATA_SECTION_ELEMENTS, "yes");  // huh?
-
 //      transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC,
 //          "-//W3C//DTD XHTML 1.0 Transitional//EN");
 //      transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM,
 //          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd");
-
       // For Android, because (at least 2.3.3) doesn't like indent-number
       if (useIndentAmount) {
         transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", String.valueOf(indent));
@@ -1043,7 +974,7 @@ public class XML implements Serializable {
 
 //      transformer.setOutputProperty(OutputKeys.ENCODING,"ISO-8859-1");
 //      transformer.setOutputProperty(OutputKeys.ENCODING,"UTF8");
-      transformer.setOutputProperty(OutputKeys.ENCODING,"UTF-8");
+      transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 //      transformer.setOutputProperty(OutputKeys.CDATA_SECTION_ELEMENTS
 
       // Always indent, otherwise the XML declaration will just be jammed
@@ -1054,7 +985,6 @@ public class XML implements Serializable {
 //      for (Object key : p.keySet()) {
 //        System.out.println(key + " -> " + p.get(key));
 //      }
-
       // If you smell something, that's because this code stinks. No matter
       // the settings of the Transformer object, if the XML document already
       // has whitespace elements, it won't bother re-indenting/re-formatting.
@@ -1063,7 +993,6 @@ public class XML implements Serializable {
       // of the factory will kick in. If you know a better way to do this,
       // please contribute. I've wasted too much of my Sunday on it. But at
       // least the Giants are getting blown out by the Falcons.
-
       final String decl = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
       final String sep = System.getProperty("line.separator");
 
@@ -1103,7 +1032,6 @@ public class XML implements Serializable {
 
       // Since the indent is not -1, bring back the XML declaration
       //transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-
       StringWriter stringWriter = new StringWriter();
       StreamResult xmlOutput = new StreamResult(stringWriter);
 //      DOMSource source = new DOMSource(node);
@@ -1115,11 +1043,11 @@ public class XML implements Serializable {
       if (outgoing.startsWith(decl)) {
         int declen = decl.length();
         int seplen = sep.length();
-        if (outgoing.length() > declen + seplen &&
-            !outgoing.substring(declen, declen + seplen).equals(sep)) {
+        if (outgoing.length() > declen + seplen
+                && !outgoing.substring(declen, declen + seplen).equals(sep)) {
           // make sure there's a line break between the XML decl and the code
-          return outgoing.substring(0, decl.length()) +
-            sep + outgoing.substring(decl.length());
+          return outgoing.substring(0, decl.length())
+                  + sep + outgoing.substring(decl.length());
         }
         return outgoing;
       } else {
@@ -1132,16 +1060,14 @@ public class XML implements Serializable {
     return null;
   }
 
-
   public void print() {
     PApplet.println(format(2));
   }
 
-
   /**
-   * Return the XML document formatted with two spaces for indents.
-   * Chosen to do this since it's the most common case (e.g. with println()).
-   * Same as format(2). Use the format() function for more options.
+   * Return the XML document formatted with two spaces for indents. Chosen to do
+   * this since it's the most common case (e.g. with println()). Same as
+   * format(2). Use the format() function for more options.
    *
    * @webref xml:method
    * @brief Gets XML data as a String using default formatting
