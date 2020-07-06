@@ -58,6 +58,7 @@ public class JAppleMenuBar {
 	    }
 	  } catch (IOException e) {
 	    sadness("Unknown error, here's the stack trace.");
+	    e.printStackTrace();
 	  }
 	}
 	

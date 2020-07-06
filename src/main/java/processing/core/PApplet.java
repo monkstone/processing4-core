@@ -87,28 +87,28 @@ import processing.opengl.*;
  */
 public class PApplet implements PConstants {
   /** Full name of the Java version (i.e. 1.5.0_11). */
-  static public final String javaVersionName =
+  static public final String JAVA_VERSION_NAME =
     System.getProperty("java.version");
 
-  static public final int javaPlatform;
+  static public final int JAVA_PLATFORM;
   static {
-    String version = javaVersionName;
-    if (javaVersionName.startsWith("1.")) {
+    String version = JAVA_VERSION_NAME;
+    if (JAVA_VERSION_NAME.startsWith("1.")) {
       version = version.substring(2);
-      javaPlatform = parseInt(version.substring(0, version.indexOf('.')));
+      JAVA_PLATFORM = parseInt(version.substring(0, version.indexOf('.')));
     } else {
       // Remove -xxx and .yyy from java.version (@see JEP-223)
-      javaPlatform = parseInt(version.replaceAll("-.*","").replaceAll("\\..*",""));
+      JAVA_PLATFORM = parseInt(version.replaceAll("-.*","").replaceAll("\\..*",""));
     }
   }
 
   /**
-   * Do not use; javaPlatform or javaVersionName are better options.
-   * For instance, javaPlatform is useful when you need a number for
-   * comparison, i.e. "if (javaPlatform >= 9)".
+   * Do not use; JAVA_PLATFORM or JAVA_VERSION_NAME are better options.
+   * For instance, JAVA_PLATFORM is useful when you need a number for
+   * comparison, i.e. "if (JAVA_PLATFORM >= 9)".
    */
   @Deprecated
-  public static final float javaVersion = 1 + javaPlatform / 10f;
+  public static final float JAVA_VERSION = 1 + JAVA_PLATFORM / 10f;
 
   /**
    * Current platform in use, one of the PConstants WINDOWS, MACOS, LINUX or OTHER.
@@ -118,10 +118,10 @@ public class PApplet implements PConstants {
   static {
     final String name = System.getProperty("os.name");
 
-    if (name.indexOf("Mac") != -1) {
+    if (name.contains("Mac")) {
       platform = MACOS;
 
-    } else if (name.indexOf("Windows") != -1) {
+    } else if (name.contains("Windows")) {
       platform = WINDOWS;
 
     } else if (name.equals("Linux")) {  // true for the ibm vm
@@ -864,7 +864,7 @@ public class PApplet implements PConstants {
       BufferedReader errReader = createReader(p.getErrorStream());
       StringBuilder stdout = new StringBuilder();
       StringBuilder stderr = new StringBuilder();
-      String line = null;
+      String line;
       try {
         while ((line = outReader.readLine()) != null) {
           stdout.append(line);
@@ -879,7 +879,7 @@ public class PApplet implements PConstants {
       int resultCode = -1;
       try {
         resultCode = p.waitFor();
-      } catch (InterruptedException e) { }
+      } catch (InterruptedException ignored) { }
 
       if (resultCode == 1) {
         System.err.println("Could not check the status of “Displays have separate spaces.”");
@@ -1252,6 +1252,7 @@ public class PApplet implements PConstants {
     Object[] emptyArgs = new Object[] { };
 
 
+    @SuppressWarnings("unused")
     void handle() {
       handle(emptyArgs);
     }
@@ -1261,7 +1262,7 @@ public class PApplet implements PConstants {
       for (int i = 0; i < count; i++) {
         try {
           methods[i].invoke(objects[i], args);
-        } catch (Exception e) {
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
           // check for wrapped exception, get root exception
           Throwable t;
           if (e instanceof InvocationTargetException) {
@@ -1398,13 +1399,13 @@ public class PApplet implements PConstants {
       die("There is no public " + name + "() method in the class " +
           o.getClass().getName());
 
-    } catch (Exception e) {
+    } catch (SecurityException e) {
       die("Could not register " + name + " + () for " + o, e);
     }
   }
 
 
-  private void registerWithArgs(String name, Object o, Class<?> cargs[]) {
+  private void registerWithArgs(String name, Object o, Class<?>[] cargs) {
     Class<?> c = o.getClass();
     try {
       Method method = c.getMethod(name, cargs);
@@ -1420,7 +1421,7 @@ public class PApplet implements PConstants {
       die("There is no public " + name + "() method in the class " +
           o.getClass().getName());
 
-    } catch (Exception e) {
+    } catch (SecurityException e) {
       die("Could not register " + name + " + () for " + o, e);
     }
   }
@@ -1438,8 +1439,6 @@ public class PApplet implements PConstants {
         die("No registered methods with the name " + name + "() were found.");
       }
       try {
-//      Method method = o.getClass().getMethod(name, new Class[] {});
-//      meth.remove(o, method);
         meth.remove(target);
       } catch (Exception e) {
         die("Could not unregister " + name + "() for " + target, e);
@@ -1766,8 +1765,8 @@ public class PApplet implements PConstants {
    * are needed.
    * 
    * The <b>size()</b> function can only be used once inside a sketch, and
-   * cannot be used for resizing.<br/>
-   * <br/> <b>renderer</b> parameter selects which rendering engine to use.
+   * cannot be used for resizing.
+   *  <b>renderer</b> parameter selects which rendering engine to use.
    * For example, if you will be drawing 3D shapes, use <b>P3D</b>, if you
    * want to export images from a program as a PDF file use <b>PDF</b>. A
    * brief description of the three primary renderers follows:
@@ -1956,8 +1955,8 @@ public class PApplet implements PConstants {
    * 
    * It's important to call any drawing functions between <b>beginDraw()</b>
    * and <b>endDraw()</b> statements. This is also true for any functions
-   * that affect drawing, such as <b>smooth()</b> or <b>colorMode()</b>.<br/>
-   * <br/> the main drawing surface which is completely opaque, surfaces
+   * that affect drawing, such as <b>smooth()</b> or <b>colorMode()</b>.
+   *  the main drawing surface which is completely opaque, surfaces
    * created with <b>createGraphics()</b> can have transparency. This makes
    * it possible to draw into a graphics and maintain the alpha channel. By
    * using <b>save()</b> to write a PNG or TGA file, the transparency of the
@@ -2349,11 +2348,11 @@ public class PApplet implements PConstants {
    * the program to update the display window only when necessary, for
    * example when an event registered by <b>mousePressed()</b> or
    * <b>keyPressed()</b> occurs.
-   * <br/><br/> structuring a program, it only makes sense to call redraw()
+   *  structuring a program, it only makes sense to call redraw()
    * within events such as <b>mousePressed()</b>. This is because
    * <b>redraw()</b> does not run <b>draw()</b> immediately (it only sets a
    * flag that indicates an update is needed).
-   * <br/><br/> <b>redraw()</b> within <b>draw()</b> has no effect because
+   *  <b>redraw()</b> within <b>draw()</b> has no effect because
    * <b>draw()</b> is continuously called anyway.
    *
    * ( end auto-generated )
@@ -3707,13 +3706,7 @@ public class PApplet implements PConstants {
    * @see PApplet#noLoop()
    */
   public void thread(final String name) {
-    Thread later = new Thread() {
-      @Override
-      public void run() {
-        method(name);
-      }
-    };
-    later.start();
+    new Thread(() -> method(name)).start();
   }
 
 
@@ -3735,7 +3728,7 @@ public class PApplet implements PConstants {
    * which may be opened by selecting "Show sketch folder" from the "Sketch"
    * menu. It is not possible to use <b>save()</b> while running the program
    * in a web browser.
-   * <br/> images saved from the main drawing window will be opaque. To save
+   *  images saved from the main drawing window will be opaque. To save
    * images without a background, use <b>createGraphics()</b>.
    *
    * ( end auto-generated )
@@ -3782,7 +3775,7 @@ public class PApplet implements PConstants {
    * href="http://wiki.processing.org/w/Sign_an_Applet">signed applet</A>. To
    * save a file back to a server, see the <a
    * href="http://wiki.processing.org/w/Saving_files_to_a_web-server">save to
-   * web</A> code snippet on the Processing Wiki.<br/>
+   * web</A> code snippet on the Processing Wiki.
    * <br/ >
    * All images saved from the main drawing window will be opaque. To save
    * images without a background, use <b>createGraphics()</b>.
@@ -4024,7 +4017,7 @@ public class PApplet implements PConstants {
    * to this function creates a new line of output. Individual elements can
    * be separated with quotes ("") and joined with the string concatenation
    * operator (+). See <b>print()</b> for more about what to expect in the output.
-   * <br/><br/> <b>println()</b> on an array (by itself) will write the
+   *  <b>println()</b> on an array (by itself) will write the
    * contents of the array to the console. This is often helpful for looking
    * at the data a program is producing. A new line is put between each
    * element of the array. This function can only print one dimensional
@@ -5198,8 +5191,8 @@ public class PApplet implements PConstants {
    * parameter. Eg. a falloff factor of 0.75 means each octave will now have
    * 75% impact (25% less) of the previous lower octave. Any value between
    * 0.0 and 1.0 is valid, however note that values greater than 0.5 might
-   * result in greater than 1.0 values returned by <b>noise()</b>.
-   By changing these parameters, the signal created by the <b>noise()</b>
+   * result in greater than 1.0 values returned by <b>noise()</b>.<br
+   * />By changing these parameters, the signal created by the <b>noise()</b>
    * function can be adapted to fit very specific needs and characteristics.
    *
    * ( end auto-generated )
@@ -5256,23 +5249,23 @@ public class PApplet implements PConstants {
    * be loaded. To load correctly, images must be located in the data
    * directory of the current sketch. In most cases, load all images in
    * <b>setup()</b> to preload them at the start of the program. Loading
-   * images inside <b>draw()</b> will reduce the speed of a program.<br/>
-   * <br/> <b>filename</b> parameter can also be a URL to a file found
+   * images inside <b>draw()</b> will reduce the speed of a program.
+   *  <b>filename</b> parameter can also be a URL to a file found
    * online. For security reasons, a Processing sketch found online can only
    * download files from the same server from which it came. Getting around
    * this restriction requires a <a
    * href="http://wiki.processing.org/w/Sign_an_Applet">signed
-   * applet</a>.<br/>
-   * <br/> <b>extension</b> parameter is used to determine the image type in
+   * applet</a>.
+   *  <b>extension</b> parameter is used to determine the image type in
    * cases where the image filename does not end with a proper extension.
    * Specify the extension as the second parameter to <b>loadImage()</b>, as
-   * shown in the third example on this page.<br/>
-   * <br/> an image is not loaded successfully, the <b>null</b> value is
+   * shown in the third example on this page.
+   *  an image is not loaded successfully, the <b>null</b> value is
    * returned and an error message will be printed to the console. The error
    * message does not halt the program, however the null value may cause a
    * NullPointerException if your code does not check whether the value
-   * returned from <b>loadImage()</b> is null.<br/>
-   * <br/> on the type of error, a <b>PImage</b> object may still be
+   * returned from <b>loadImage()</b> is null.
+   *  on the type of error, a <b>PImage</b> object may still be
    * returned, but the width and height of the image will be set to -1. This
    * happens if bad image data is returned or cannot be decoded properly.
    * Sometimes this happens with image URLs that produce a 403 error or that
@@ -5328,7 +5321,7 @@ public class PApplet implements PConstants {
    * when the image has loaded properly because its width and height will be
    * greater than 0. Asynchronous image loading (particularly when
    * downloading from a server) can dramatically improve performance.
-   * <br/> <b>extension</b> parameter is used to determine the image type in
+   *  <b>extension</b> parameter is used to determine the image type in
    * cases where the image filename does not end with a proper extension.
    * Specify the extension as the second parameter to <b>requestImage()</b>.
    *
@@ -5350,11 +5343,7 @@ public class PApplet implements PConstants {
 
     // if the image loading thread pool hasn't been created, create it
     if (requestImagePool == null) {
-      ThreadFactory factory = new ThreadFactory() {
-        public Thread newThread(Runnable r) {
-          return new Thread(r, REQUEST_IMAGE_THREAD_PREFIX);
-        }
-      };
+      ThreadFactory factory = r -> new Thread(r, REQUEST_IMAGE_THREAD_PREFIX);
       requestImagePool = Executors.newFixedThreadPool(4, factory);
     }
     requestImagePool.execute(() -> {
@@ -5434,13 +5423,7 @@ public class PApplet implements PConstants {
 
       // can't use catch-all exception, since it might catch the
       // RuntimeException about the incorrect case sensitivity
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-
-    } catch (ParserConfigurationException e) {
-      throw new RuntimeException(e);
-
-    } catch (SAXException e) {
+    } catch (IOException | ParserConfigurationException | SAXException e) {
       throw new RuntimeException(e);
     }
   }
@@ -5671,10 +5654,9 @@ public class PApplet implements PConstants {
       String optionStr = Table.extensionOptions(true, filename, options);
       String[] optionList = trim(split(optionStr, ','));
 
-      Table dictionary = null;
       for (String opt : optionList) {
         if (opt.startsWith("dictionary=")) {
-          dictionary = loadTable(opt.substring(opt.indexOf('=') + 1), "tsv");
+          Table dictionary = loadTable(opt.substring(opt.indexOf('=') + 1), "tsv");
           return dictionary.typedParse(createInput(filename), optionStr);
         }
       }
@@ -6592,7 +6574,7 @@ public class PApplet implements PConstants {
       }
     }
 
-    InputStream stream = null;
+    InputStream stream;
 
     // Moved this earlier than the getResourceAsStream() checks, because
     // calling getResourceAsStream() on a directory lists its contents.
@@ -6626,17 +6608,15 @@ public class PApplet implements PConstants {
                                        filename + ". Rename the file " +
                                        "or change your code.");
           }
-        } catch (IOException e) { }
+        } catch (IOException ignored) { }
       }
 
       // if this file is ok, may as well just load it
-      stream = new FileInputStream(file);
-      if (stream != null) return stream;
+      return new FileInputStream(file);
 
       // have to break these out because a general Exception might
       // catch the RuntimeException being thrown above
-    } catch (IOException ioe) {
-    } catch (SecurityException se) { }
+    } catch (IOException | SecurityException ignored) { }
 
     // Using getClassLoader() prevents java from converting dots
     // to slashes or requiring a slash at the beginning.
@@ -6674,21 +6654,18 @@ public class PApplet implements PConstants {
       // an application, or as a signed applet
       try {  // first try to catch any security exceptions
         try {
-          stream = new FileInputStream(dataPath(filename));
-          if (stream != null) return stream;
-        } catch (IOException e2) { }
+          return new FileInputStream(dataPath(filename));
+        } catch (IOException ignored) { }
 
         try {
-          stream = new FileInputStream(sketchPath(filename));
-          if (stream != null) return stream;
-        } catch (Exception e) { }  // ignored
+          return new FileInputStream(sketchPath(filename));
+        } catch (Exception ignored) { }
 
         try {
-          stream = new FileInputStream(filename);
-          if (stream != null) return stream;
-        } catch (IOException e1) { }
+          return new FileInputStream(filename);
+        } catch (IOException ignored) { }
 
-      } catch (SecurityException se) { }  // online, whups
+      } catch (SecurityException ignored) { }  // online, whups
 
     } catch (Exception e) {
       printStackTrace(e);
@@ -6780,7 +6757,7 @@ public class PApplet implements PConstants {
           }
 
           if (input != null) {
-            byte[] buffer = null;
+            byte[] buffer;
             if (length != -1) {
               buffer = new byte[length];
               int count;
@@ -7003,14 +6980,9 @@ public class PApplet implements PConstants {
    * @nowebref
    */
   static public String[] loadStrings(InputStream input) {
-    try {
-      BufferedReader reader =
-        new BufferedReader(new InputStreamReader(input, "UTF-8"));
-      return loadStrings(reader);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return null;
+    BufferedReader reader =
+      new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));
+    return loadStrings(reader);
   }
 
 
@@ -7018,7 +6990,7 @@ public class PApplet implements PConstants {
     try {
       String[] lines = new String[100];
       int lineCount = 0;
-      String line = null;
+      String line;
       while ((line = reader.readLine()) != null) {
         if (lineCount == lines.length) {
           String[] temp = new String[lineCount << 1];
@@ -7154,24 +7126,23 @@ public class PApplet implements PConstants {
 
       saveStream(targetStream, source);
       targetStream.close();
-      targetStream = null;
 
       if (target.exists()) {
         if (!target.delete()) {
-          System.err.println("Could not replace " +
-                             target.getAbsolutePath() + ".");
+          System.err.println("Could not replace " + target);
         }
       }
       if (!tempFile.renameTo(target)) {
-        System.err.println("Could not rename temporary file " +
-                           tempFile.getAbsolutePath());
+        System.err.println("Could not rename temporary file " + tempFile);
         return false;
       }
       return true;
 
     } catch (IOException e) {
       if (tempFile != null) {
-        tempFile.delete();
+        if (!tempFile.delete()) {
+          System.err.println("Could not rename temporary file " + tempFile);
+        }
       }
       e.printStackTrace();
       return false;
@@ -7235,7 +7206,9 @@ public class PApplet implements PConstants {
   static private File createTempFile(File file) throws IOException {
     File parentDir = file.getParentFile();
     if (!parentDir.exists()) {
-      parentDir.mkdirs();
+      if (!parentDir.mkdirs()) {
+        throw new IOException("Could not make directories for " + parentDir);
+      }
     }
     String name = file.getName();
     String prefix;
@@ -7266,25 +7239,29 @@ public class PApplet implements PConstants {
       tempFile = createTempFile(file);
 
       OutputStream output = createOutput(tempFile);
-      saveBytes(output, data);
-      output.close();
-      output = null;
+      if (output != null) {
+        saveBytes(output, data);
+        output.close();
+      } else {
+        System.err.println("Could not write to " + tempFile);
+      }
 
       if (file.exists()) {
         if (!file.delete()) {
-          System.err.println("Could not replace " + file.getAbsolutePath());
+          System.err.println("Could not replace " + file);
         }
       }
 
       if (!tempFile.renameTo(file)) {
-        System.err.println("Could not rename temporary file " +
-                           tempFile.getAbsolutePath());
+        System.err.println("Could not rename temporary file " + tempFile);
       }
 
     } catch (IOException e) {
       System.err.println("error saving bytes to " + file);
       if (tempFile != null) {
-        tempFile.delete();
+        if (!tempFile.delete()) {
+          System.err.println("Could not delete temporary file " + tempFile);
+        }
       }
       e.printStackTrace();
     }
@@ -7320,7 +7297,7 @@ public class PApplet implements PConstants {
    * href="http://wiki.processing.org/w/Sign_an_Applet">signed applet</A>. To
    * save a file back to a server, see the <a
    * href="http://wiki.processing.org/w/Saving_files_to_a_web-server">save to
-   * web</A> code snippet on the Processing Wiki.<br/>
+   * web</A> code snippet on the Processing Wiki.
    * <br/ >
    * Starting with Processing 1.0, all files loaded and saved by the
    * Processing API use UTF-8 encoding. In previous releases, the default
@@ -7624,11 +7601,7 @@ public class PApplet implements PConstants {
   // using toURI() and URI.toURL()."
   // https://docs.oracle.com/javase/8/docs/api/java/net/URL.html
   static public String urlDecode(String str) {
-    try {
-      return URLDecoder.decode(str, "UTF-8");
-    } catch (UnsupportedEncodingException e) {  // safe per the JDK source
-      return null;
-    }
+    return URLDecoder.decode(str, StandardCharsets.UTF_8);
   }
 
 
@@ -8614,8 +8587,8 @@ public class PApplet implements PConstants {
 
     char[] chars = value.toCharArray();
     int splitCount = 0; //1;
-    for (int i = 0; i < chars.length; i++) {
-      if (chars[i] == delim) splitCount++;
+    for (char ch : chars) {
+      if (ch == delim) splitCount++;
     }
     // make sure that there is something in the input string
     //if (chars.length > 0) {
@@ -9360,7 +9333,7 @@ public class PApplet implements PConstants {
    * appropriate commas to mark units of 1000. There are two versions, one
    * for formatting ints and one for formatting an array of ints. The value
    * for the <b>digits</b> parameter should always be a positive integer.
-   * <br/><br/>
+   * 
    * For a non-US locale, this will insert periods instead of commas, or
    * whatever is apprioriate for that region.
    *
@@ -10583,7 +10556,7 @@ public class PApplet implements PConstants {
    * Loads the pixel data for the display window into the <b>pixels[]</b>
    * array. This function must always be called before reading from or
    * writing to <b>pixels[]</b>.
-   * <br/><br/> renderers may or may not seem to require <b>loadPixels()</b>
+   *  renderers may or may not seem to require <b>loadPixels()</b>
    * or <b>updatePixels()</b>. However, the rule is that any time you want to
    * manipulate the <b>pixels[]</b> array, you must first call
    * <b>loadPixels()</b>, and after changes have been made, call
@@ -10613,7 +10586,7 @@ public class PApplet implements PConstants {
    * Use in conjunction with <b>loadPixels()</b>. If you're only reading
    * pixels from the array, there's no need to call <b>updatePixels()</b>
    * unless there are changes.
-   * <br/><br/> renderers may or may not seem to require <b>loadPixels()</b>
+   *  renderers may or may not seem to require <b>loadPixels()</b>
    * or <b>updatePixels()</b>. However, the rule is that any time you want to
    * manipulate the <b>pixels[]</b> array, you must first call
    * <b>loadPixels()</b>, and after changes have been made, call
@@ -12337,11 +12310,11 @@ public class PApplet implements PConstants {
    * used. This font will be used in all subsequent calls to the
    * <b>text()</b> function. If no <b>size</b> parameter is input, the font
    * will appear at its original size (the size it was created at with the
-   * "Create Font..." tool) until it is changed with <b>textSize()</b>. 
-     Because fonts are usually bitmaped, you should create fonts at
+   * "Create Font..." tool) until it is changed with <b>textSize()</b>. <br
+   * />  Because fonts are usually bitmaped, you should create fonts at
    * the sizes that will be used most commonly. Using <b>textFont()</b>
-   * without the size parameter will result in the cleanest-looking text. 
-    With the default (JAVA2D) and PDF renderers, it's also possible
+   * without the size parameter will result in the cleanest-looking text. <br
+   * /> With the default (JAVA2D) and PDF renderers, it's also possible
    * to enable the use of native fonts via the command
    * <b>hint(ENABLE_NATIVE_FONTS)</b>. This will produce vector text in
    * JAVA2D sketches and PDF output in cases where the vector data is
@@ -13269,8 +13242,8 @@ public class PApplet implements PConstants {
    * reason, camera functions should be placed at the beginning of
    * <b>draw()</b> (so that transformations happen afterwards), and the
    * <b>camera()</b> function can be used after <b>beginCamera()</b> if you
-   * want to reset the camera before applying transformations.
-   This function sets the matrix mode to the camera matrix so calls such
+   * want to reset the camera before applying transformations.<br
+   * />This function sets the matrix mode to the camera matrix so calls such
    * as <b>translate()</b>, <b>rotate()</b>, applyMatrix() and resetMatrix()
    * affect the camera. <b>beginCamera()</b> should always be used with a
    * following <b>endCamera()</b> and pairs of <b>beginCamera()</b> and
@@ -14630,13 +14603,13 @@ public class PApplet implements PConstants {
   /**
    * Takes an RGB or ARGB image and sets it as the background.
    * The width and height of the image must be the same size as the sketch.
-   * Use image.resize(width, height) to make short work of such a task.<br/>
-   * <br/>
+   * Use image.resize(width, height) to make short work of such a task.
+   * 
    * Note that even if the image is set as RGB, the high 8 bits of each pixel
    * should be set opaque (0xFF000000) because the image data will be copied
    * directly to the screen, and non-opaque background images may have strange
-   * behavior. Use image.filter(OPAQUE) to handle this easily.<br/>
-   * <br/>
+   * behavior. Use image.filter(OPAQUE) to handle this easily.
+   * 
    * When using 3D, this will also clear the zbuffer (if it exists).
    *
    * @param image PImage to set as background (must be same size as the sketch window)
@@ -14734,8 +14707,8 @@ public class PApplet implements PConstants {
    * is easy to use and undestand, but is slower than another technique. To
    * achieve the same results when working in <b>colorMode(RGB, 255)</b>, but
    * with greater speed, use the &gt;&gt; (right shift) operator with a bit
-   * mask. For example, the following two lines of code are equivalent:
-   <pre>float r1 = red(myColor);float r2 = myColor &gt;&gt; 16
+   * mask. For example, the following two lines of code are equivalent:<br
+   * /><pre>float r1 = red(myColor);float r2 = myColor &gt;&gt; 16
    * &amp; 0xFF;</pre>
    *
    * ( end auto-generated )
@@ -14940,19 +14913,6 @@ public class PApplet implements PConstants {
 
 
   /**
-   * Save a PImage to a path using ImageIO.
-   *
-   * @param image The image to be saved.
-   * @param path The path to which it should be saved.
-   * @return True if successful and false otherwise.
-   * @throws IOException
-   */
-  static public boolean saveViaImageIO(PImage image, String path) throws IOException {
-    return PGraphics.saveViaImageIO(image, path);
-  }
-
-
-  /**
    * Check the alpha on an image, using a really primitive loop.
    */
   public void checkAlpha() {
@@ -15142,7 +15102,7 @@ public class PApplet implements PConstants {
    * ( begin auto-generated from PImage_filter.xml )
    *
    * Filters an image as defined by one of the following modes:
-   THRESHOLD - converts the image to black and white pixels depending if
+   * THRESHOLD - converts the image to black and white pixels depending if
    * they are above or below the threshold defined by the level parameter.
    * The level must be between 0.0 (black) and 1.0(white). If no level is
    * specified, 0.5 is used.

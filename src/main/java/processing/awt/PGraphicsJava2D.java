@@ -263,7 +263,8 @@ public class PGraphicsJava2D extends PGraphics {
 //  }
 
 
-  /** Returns the java.awt.Graphics2D object used by this renderer. */
+  /** Returns the java.awt.Graphics2D object used by this renderer.
+   * @return  */
   @Override
   public Object getNative() {
     return g2;
@@ -995,12 +996,9 @@ public class PGraphicsJava2D extends PGraphics {
   /**
    * ( begin auto-generated from blendMode.xml )
    *
-   * This is a new reference entry for Processing 2.0. It will be updated shortly.
-   *
-   * ( end auto-generated )
+   * This is a new reference entry for Processing 2.0.It will be updated shortly. ( end auto-generated )
    *
    * @webref Rendering
-   * @param mode the blending mode to use
    */
   @Override
   protected void blendModeImpl() {
@@ -2793,6 +2791,8 @@ public class PGraphicsJava2D extends PGraphics {
    * <P>
    * Unlike in PImage, where updatePixels() only requests that the
    * update happens, in PGraphicsJava2D, this will happen immediately.
+   * @param c
+   * @param d
    */
   @Override
   public void updatePixels(int x, int y, int c, int d) {
@@ -3032,8 +3032,9 @@ public class PGraphicsJava2D extends PGraphics {
   // SAVE
 
 
-//  public void save(String filename) {
-//    loadPixels();
-//    super.save(filename);
-//  }
+  @Override
+  public boolean save(String filename) {
+    PImageAWT outImage = new PImageAWT(image);
+    return outImage.save(filename);
+  }
 }

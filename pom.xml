@@ -11,7 +11,7 @@ DO NOT MODIFIY - GENERATED CODE
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.processing</groupId>
   <artifactId>core</artifactId>
-  <version>4.0</version>
+  <version>4.0.0</version>
   <name>processing-core</name>
   <description>Jar for ruby-processing projects</description>
   <url>https://github.com/monkstone/processing4-core</url>
@@ -108,11 +108,11 @@ DO NOT MODIFIY - GENERATED CODE
         </plugin>
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>3.1.1</version>
+          <version>3.2.0</version>
           <configuration>
             <archive>
               <manifestEntries>
-                <Class-Path>gluegen-rt.jar jog-all.jar</Class-Path>
+                <Automatic-Module-Name>org.processing.core</Automatic-Module-Name>
               </manifestEntries>
             </archive>
           </configuration>
