@@ -1,6 +1,6 @@
 /* -*- mode: java; c-basic-offset: 2; indent-tabs-mode: nil -*- */
 
- /*
+/*
   Part of the Processing project - http://processing.org
 
   Copyright (c) 2012-2014 The Processing Foundation
@@ -18,25 +18,27 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software Foundation,
   Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
+*/
+
 package processing.core;
 
 import java.awt.Desktop;
 import java.awt.Image;
 import java.awt.Taskbar;
 
+
 /**
  * Deal with issues related to macOS application behavior.
  *
- * We have to register a quit handler to safely shut down the sketch, otherwise
- * OS X will just kill the sketch when a user hits Cmd-Q. In addition, we have a
- * method to set the dock icon image so we look more like a native application.
+ * We have to register a quit handler to safely shut down the sketch,
+ * otherwise OS X will just kill the sketch when a user hits Cmd-Q.
+ * In addition, we have a method to set the dock icon image so we look more
+ * like a native application.
  *
  * This is a stripped-down version of what's in processing.app.platform to fix
  * <a href="https://github.com/processing/processing/issues/3301">3301</a>.
  */
 public class ThinkDifferent {
-
   static private Desktop desktop;
   static private Taskbar taskbar;
 
@@ -44,6 +46,7 @@ public class ThinkDifferent {
   // call if the sketch is held up for some reason, like an exception that's
   // managed to put the sketch in a bad state.
   static boolean attemptedQuit;
+
 
   /**
    * Initialize the sketch with the quit handler.
@@ -69,6 +72,7 @@ public class ThinkDifferent {
     });
   }
 
+
   /**
    * Remove the quit handler.
    */
@@ -76,18 +80,18 @@ public class ThinkDifferent {
     getDesktop().setQuitHandler(null);
   }
 
+
   /**
    * Called via reflection from PSurfaceAWT and others, set the dock icon image.
-   *
    * @param image The image to provide for Processing icon.
    */
   static public void setIconImage(Image image) {
     getTaskbar().setIconImage(image);
   }
 
+
   /**
    * Get the taskbar where OS visual settings can be provided.
-   *
    * @return Cached taskbar singleton instance.
    */
   static private Taskbar getTaskbar() {
@@ -97,9 +101,9 @@ public class ThinkDifferent {
     return taskbar;
   }
 
+
   /**
    * Get the desktop where OS behavior can be provided.
-   *
    * @return Cached desktop singleton instance.
    */
   static private Desktop getDesktop() {

@@ -1,6 +1,6 @@
 /* -*- mode: java; c-basic-offset: 2; indent-tabs-mode: nil -*- */
 
- /*
+/*
   Part of the Processing project - http://processing.org
 
   Copyright (c) 2012-17 The Processing Foundation
@@ -21,32 +21,33 @@
   Free Software Foundation, Inc., 59 Temple Place, Suite 330,
   Boston, MA  02111-1307  USA
  */
+
 package processing.core;
 
 import java.io.Serializable;
 
+
 /**
  * ( begin auto-generated from PVector.xml )
  *
- * A class to describe a two or three dimensional vector. This datatype stores
- * two or three variables that are commonly used as a position, velocity, and/or
- * acceleration. Technically, <em>position</em> is a point and <em>velocity</em>
- * and <em>acceleration</em> are vectors, but this is often simplified to
- * consider all three as vectors. For example, if you consider a rectangle
- * moving across the screen, at any given instant it has a position (the
- * object's location, expressed as a point.), a velocity (the rate at which the
- * object's position changes per time unit, expressed as a vector), and
- * acceleration (the rate at which the object's velocity changes per time unit,
- * expressed as a vector). Since vectors represent groupings of values, we
- * cannot simply use traditional addition/multiplication/etc. Instead, we'll
- * need to do some "vector" math, which is made easy by the methods inside the
- * <b>PVector</b>
+ * A class to describe a two or three dimensional vector. This datatype
+ * stores two or three variables that are commonly used as a position,
+ * velocity, and/or acceleration. Technically, <em>position</em> is a point
+ * and <em>velocity</em> and <em>acceleration</em> are vectors, but this is
+ * often simplified to consider all three as vectors. For example, if you
+ * consider a rectangle moving across the screen, at any given instant it
+ * has a position (the object's location, expressed as a point.), a
+ * velocity (the rate at which the object's position changes per time unit,
+ * expressed as a vector), and acceleration (the rate at which the object's
+ * velocity changes per time unit, expressed as a vector). Since vectors
+ * represent groupings of values, we cannot simply use traditional
+ * addition/multiplication/etc. Instead, we'll need to do some "vector"
+ * math, which is made easy by the methods inside the <b>PVector</b>
  * class.
- *
+ * 
  * The methods for this class are extensive. For a complete list, visit the
  * <a
- * href="http://processing.googlecode.com/svn/trunk/processing/build/javadoc/core/">developer's
- * reference.</a>
+ * href="http://processing.googlecode.com/svn/trunk/processing/build/javadoc/core/">developer's reference.</a>
  *
  * ( end auto-generated )
  *
@@ -54,20 +55,18 @@ import java.io.Serializable;
  * <p>
  * The result of all functions are applied to the vector itself, with the
  * exception of cross(), which returns a new PVector (or writes to a specified
- * 'target' PVector). That is, add() will add the contents of one vector to this
- * one. Using add() with additional parameters allows you to put the result into
- * a new PVector. Functions that act on multiple vectors also include static
- * versions. Because creating new objects can be computationally expensive, most
- * functions include an optional 'target' PVector, so that a new PVector object
- * is not created with each operation.
+ * 'target' PVector). That is, add() will add the contents of one vector to
+ * this one. Using add() with additional parameters allows you to put the
+ * result into a new PVector. Functions that act on multiple vectors also
+ * include static versions. Because creating new objects can be computationally
+ * expensive, most functions include an optional 'target' PVector, so that a
+ * new PVector object is not created with each operation.
  * <p>
- * Initially based on the Vector3D class by
- * <a href="http://www.shiffman.net">Dan Shiffman</a>.
+ * Initially based on the Vector3D class by <a href="http://www.shiffman.net">Dan Shiffman</a>.
  *
  * @webref math
  */
 public class PVector implements Serializable {
-
   /**
    * ( begin auto-generated from PVector_x.xml )
    *
@@ -110,10 +109,9 @@ public class PVector implements Serializable {
    */
   public float z;
 
-  /**
-   * Array so that this can be temporarily used in an array context
-   */
+  /** Array so that this can be temporarily used in an array context */
   transient protected float[] array;
+
 
   /**
    * Constructor for an empty vector: x, y, and z are set to 0.
@@ -121,18 +119,20 @@ public class PVector implements Serializable {
   public PVector() {
   }
 
+
   /**
    * Constructor for a 3D vector.
    *
-   * @param x the x coordinate.
-   * @param y the y coordinate.
-   * @param z the z coordinate.
+   * @param  x the x coordinate.
+   * @param  y the y coordinate.
+   * @param  z the z coordinate.
    */
   public PVector(float x, float y, float z) {
     this.x = x;
     this.y = y;
     this.z = z;
   }
+
 
   /**
    * Constructor for a 2D vector: z coordinate is set to 0.
@@ -141,6 +141,7 @@ public class PVector implements Serializable {
     this.x = x;
     this.y = y;
   }
+
 
   /**
    * ( begin auto-generated from PVector_set.xml )
@@ -163,6 +164,7 @@ public class PVector implements Serializable {
     return this;
   }
 
+
   /**
    * @param x the x component of the vector
    * @param y the y component of the vector
@@ -174,6 +176,7 @@ public class PVector implements Serializable {
     return this;
   }
 
+
   /**
    * @param v any variable of type PVector
    */
@@ -184,9 +187,9 @@ public class PVector implements Serializable {
     return this;
   }
 
+
   /**
    * Set the x, y (and maybe z) coordinates using a float[] array as the source.
-   *
    * @param source array to copy from
    */
   public PVector set(float[] source) {
@@ -202,11 +205,12 @@ public class PVector implements Serializable {
     return this;
   }
 
+
   /**
    * ( begin auto-generated from PVector_random2D.xml )
    *
-   * Make a new 2D unit vector with a random direction. If you pass in "this" as
-   * an argument, it will use the PApplet's random number generator. You can
+   * Make a new 2D unit vector with a random direction.  If you pass in "this"
+   * as an argument, it will use the PApplet's random number generator.  You can
    * also pass in a target PVector to fill.
    *
    * @webref pvector:method
@@ -219,10 +223,10 @@ public class PVector implements Serializable {
     return random2D(null, null);
   }
 
+
   /**
-   * Make a new 2D unit vector with a random direction using Processing's
-   * current random number generator
-   *
+   * Make a new 2D unit vector with a random direction
+   * using Processing's current random number generator
    * @param parent current PApplet instance
    * @return the random PVector
    */
@@ -232,7 +236,6 @@ public class PVector implements Serializable {
 
   /**
    * Set a 2D vector to a random unit vector with a random direction
-   *
    * @param target the target vector (if null, a new vector will be created)
    * @return the random PVector
    */
@@ -240,24 +243,25 @@ public class PVector implements Serializable {
     return random2D(target, null);
   }
 
+
   /**
    * Make a new 2D unit vector with a random direction. Pass in the parent
-   * PApplet if you want randomSeed() to work (and be predictable). Or leave it
-   * null and be... random.
-   *
+   * PApplet if you want randomSeed() to work (and be predictable). Or leave
+   * it null and be... random.
    * @return the random PVector
    */
   static public PVector random2D(PVector target, PApplet parent) {
-    return (parent == null)
-            ? fromAngle((float) (Math.random() * Math.PI * 2), target)
-            : fromAngle(parent.random(PConstants.TAU), target);
+    return (parent == null) ?
+      fromAngle((float) (Math.random() * Math.PI*2), target) :
+      fromAngle(parent.random(PConstants.TAU), target);
   }
+
 
   /**
    * ( begin auto-generated from PVector_random3D.xml )
    *
-   * Make a new 3D unit vector with a random direction. If you pass in "this" as
-   * an argument, it will use the PApplet's random number generator. You can
+   * Make a new 3D unit vector with a random direction.  If you pass in "this"
+   * as an argument, it will use the PApplet's random number generator.  You can
    * also pass in a target PVector to fill.
    *
    * @webref pvector:method
@@ -270,10 +274,10 @@ public class PVector implements Serializable {
     return random3D(null, null);
   }
 
+
   /**
-   * Make a new 3D unit vector with a random direction using Processing's
-   * current random number generator
-   *
+   * Make a new 3D unit vector with a random direction
+   * using Processing's current random number generator
    * @param parent current PApplet instance
    * @return the random PVector
    */
@@ -281,9 +285,9 @@ public class PVector implements Serializable {
     return random3D(null, parent);
   }
 
+
   /**
    * Set a 3D vector to a random unit vector with a random direction
-   *
    * @param target the target vector (if null, a new vector will be created)
    * @return the random PVector
    */
@@ -291,31 +295,32 @@ public class PVector implements Serializable {
     return random3D(target, null);
   }
 
+
   /**
    * Make a new 3D unit vector with a random direction
-   *
    * @return the random PVector
    */
   static public PVector random3D(PVector target, PApplet parent) {
     float angle;
     float vz;
     if (parent == null) {
-      angle = (float) (Math.random() * Math.PI * 2);
-      vz = (float) (Math.random() * 2 - 1);
+      angle = (float) (Math.random()*Math.PI*2);
+      vz    = (float) (Math.random()*2-1);
     } else {
       angle = parent.random(PConstants.TWO_PI);
-      vz = parent.random(-1, 1);
+      vz    = parent.random(-1,1);
     }
-    float vx = (float) (Math.sqrt(1 - vz * vz) * Math.cos(angle));
-    float vy = (float) (Math.sqrt(1 - vz * vz) * Math.sin(angle));
+    float vx = (float) (Math.sqrt(1-vz*vz)*Math.cos(angle));
+    float vy = (float) (Math.sqrt(1-vz*vz)*Math.sin(angle));
     if (target == null) {
       target = new PVector(vx, vy, vz);
       //target.normalize(); // Should be unnecessary
     } else {
-      target.set(vx, vy, vz);
+      target.set(vx,vy,vz);
     }
     return target;
   }
+
 
   /**
    * ( begin auto-generated from PVector_sub.xml )
@@ -331,8 +336,9 @@ public class PVector implements Serializable {
    * @return the new unit PVector
    */
   static public PVector fromAngle(float angle) {
-    return fromAngle(angle, null);
+    return fromAngle(angle,null);
   }
+
 
   /**
    * Make a new 2D unit vector from an angle
@@ -342,12 +348,13 @@ public class PVector implements Serializable {
    */
   static public PVector fromAngle(float angle, PVector target) {
     if (target == null) {
-      target = new PVector((float) Math.cos(angle), (float) Math.sin(angle), 0);
+      target = new PVector((float)Math.cos(angle),(float)Math.sin(angle),0);
     } else {
-      target.set((float) Math.cos(angle), (float) Math.sin(angle), 0);
+      target.set((float)Math.cos(angle),(float)Math.sin(angle),0);
     }
     return target;
   }
+
 
   /**
    * ( begin auto-generated from PVector_copy.xml )
@@ -364,17 +371,19 @@ public class PVector implements Serializable {
     return new PVector(x, y, z);
   }
 
+
   @Deprecated
   public PVector get() {
     return copy();
   }
+
 
   /**
    * @param target
    */
   public float[] get(float[] target) {
     if (target == null) {
-      return new float[]{x, y, z};
+      return new float[] { x, y, z };
     }
     if (target.length >= 2) {
       target[0] = x;
@@ -386,11 +395,12 @@ public class PVector implements Serializable {
     return target;
   }
 
+
   /**
    * ( begin auto-generated from PVector_mag.xml )
    *
-   * Calculates the magnitude (length) of the vector and returns the result as a
-   * float (this is simply the equation <em>sqrt(x*x + y*y + z*z)</em>.)
+   * Calculates the magnitude (length) of the vector and returns the result
+   * as a float (this is simply the equation <em>sqrt(x*x + y*y + z*z)</em>.)
    *
    * ( end auto-generated )
    *
@@ -401,15 +411,17 @@ public class PVector implements Serializable {
    * @see PVector#magSq()
    */
   public float mag() {
-    return (float) Math.sqrt(x * x + y * y + z * z);
+    return (float) Math.sqrt(x*x + y*y + z*z);
   }
+
 
   /**
    * ( begin auto-generated from PVector_mag.xml )
    *
-   * Calculates the squared magnitude of the vector and returns the result as a
-   * float (this is simply the equation <em>(x*x + y*y + z*z)</em>.) Faster if
-   * the real length is not required in the case of comparing vectors, etc.
+   * Calculates the squared magnitude of the vector and returns the result
+   * as a float (this is simply the equation <em>(x*x + y*y + z*z)</em>.)
+   * Faster if the real length is not required in the
+   * case of comparing vectors, etc.
    *
    * ( end auto-generated )
    *
@@ -420,25 +432,25 @@ public class PVector implements Serializable {
    * @see PVector#mag()
    */
   public float magSq() {
-    return (x * x + y * y + z * z);
+    return (x*x + y*y + z*z);
   }
+
 
   /**
    * ( begin auto-generated from PVector_add.xml )
    *
    * Adds x, y, and z components to a vector, adds one vector to another, or
-   * adds two independent vectors together. The version of the method that adds
-   * two vectors together is a static method and returns a PVector, the others
-   * have no return value -- they act directly on the vector. See the examples
-   * for more context.
+   * adds two independent vectors together. The version of the method that
+   * adds two vectors together is a static method and returns a PVector, the
+   * others have no return value -- they act directly on the vector. See the
+   * examples for more context.
    *
    * ( end auto-generated )
    *
    * @webref pvector:method
    * @usage web_application
    * @param v the vector to be added
-   * @brief Adds x, y, and z components to a vector, one vector to another, or
-   * two independent vectors
+   * @brief Adds x, y, and z components to a vector, one vector to another, or two independent vectors
    */
   public PVector add(PVector v) {
     x += v.x;
@@ -446,6 +458,7 @@ public class PVector implements Serializable {
     z += v.z;
     return this;
   }
+
 
   /**
    * @param x x component of the vector
@@ -457,6 +470,7 @@ public class PVector implements Serializable {
     return this;
   }
 
+
   /**
    * @param z z component of the vector
    */
@@ -467,9 +481,9 @@ public class PVector implements Serializable {
     return this;
   }
 
+
   /**
    * Add two vectors
-   *
    * @param v1 a vector
    * @param v2 another vector
    */
@@ -477,36 +491,36 @@ public class PVector implements Serializable {
     return add(v1, v2, null);
   }
 
+
   /**
    * Add two vectors into a target vector
-   *
    * @param target the target vector (if null, a new vector will be created)
    */
   static public PVector add(PVector v1, PVector v2, PVector target) {
     if (target == null) {
-      target = new PVector(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
+      target = new PVector(v1.x + v2.x,v1.y + v2.y, v1.z + v2.z);
     } else {
       target.set(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
     }
     return target;
   }
 
+
   /**
    * ( begin auto-generated from PVector_sub.xml )
    *
-   * Subtracts x, y, and z components from a vector, subtracts one vector from
-   * another, or subtracts two independent vectors. The version of the method
-   * that subtracts two vectors is a static method and returns a PVector, the
-   * others have no return value -- they act directly on the vector. See the
-   * examples for more context.
+   * Subtracts x, y, and z components from a vector, subtracts one vector
+   * from another, or subtracts two independent vectors. The version of the
+   * method that subtracts two vectors is a static method and returns a
+   * PVector, the others have no return value -- they act directly on the
+   * vector. See the examples for more context.
    *
    * ( end auto-generated )
    *
    * @webref pvector:method
    * @usage web_application
    * @param v any variable of type PVector
-   * @brief Subtract x, y, and z components from a vector, one vector from
-   * another, or two independent vectors
+   * @brief Subtract x, y, and z components from a vector, one vector from another, or two independent vectors
    */
   public PVector sub(PVector v) {
     x -= v.x;
@@ -514,6 +528,7 @@ public class PVector implements Serializable {
     z -= v.z;
     return this;
   }
+
 
   /**
    * @param x the x component of the vector
@@ -525,6 +540,7 @@ public class PVector implements Serializable {
     return this;
   }
 
+
   /**
    * @param z the z component of the vector
    */
@@ -535,9 +551,9 @@ public class PVector implements Serializable {
     return this;
   }
 
+
   /**
    * Subtract one vector from another
-   *
    * @param v1 the x, y, and z components of a PVector object
    * @param v2 the x, y, and z components of a PVector object
    */
@@ -545,9 +561,9 @@ public class PVector implements Serializable {
     return sub(v1, v2, null);
   }
 
+
   /**
    * Subtract one vector from another and store in another vector
-   *
    * @param target PVector in which to store the result
    */
   static public PVector sub(PVector v1, PVector v2, PVector target) {
@@ -558,6 +574,7 @@ public class PVector implements Serializable {
     }
     return target;
   }
+
 
   /**
    * ( begin auto-generated from PVector_mult.xml )
@@ -578,6 +595,7 @@ public class PVector implements Serializable {
     return this;
   }
 
+
   /**
    * @param v the vector to multiply by the scalar
    */
@@ -585,19 +603,20 @@ public class PVector implements Serializable {
     return mult(v, n, null);
   }
 
+
   /**
    * Multiply a vector by a scalar, and write the result into a target PVector.
-   *
    * @param target PVector in which to store the result
    */
   static public PVector mult(PVector v, float n, PVector target) {
     if (target == null) {
-      target = new PVector(v.x * n, v.y * n, v.z * n);
+      target = new PVector(v.x*n, v.y*n, v.z*n);
     } else {
-      target.set(v.x * n, v.y * n, v.z * n);
+      target.set(v.x*n, v.y*n, v.z*n);
     }
     return target;
   }
+
 
   /**
    * ( begin auto-generated from PVector_div.xml )
@@ -618,9 +637,9 @@ public class PVector implements Serializable {
     return this;
   }
 
+
   /**
    * Divide a vector by a scalar and return the result in a new vector.
-   *
    * @param v the vector to divide by the scalar
    * @return a new vector that is v1 / n
    */
@@ -628,25 +647,26 @@ public class PVector implements Serializable {
     return div(v, n, null);
   }
 
+
   /**
    * Divide a vector by a scalar and store the result in another vector.
-   *
    * @param target PVector in which to store the result
    */
   static public PVector div(PVector v, float n, PVector target) {
     if (target == null) {
-      target = new PVector(v.x / n, v.y / n, v.z / n);
+      target = new PVector(v.x/n, v.y/n, v.z/n);
     } else {
-      target.set(v.x / n, v.y / n, v.z / n);
+      target.set(v.x/n, v.y/n, v.z/n);
     }
     return target;
   }
 
+
   /**
    * ( begin auto-generated from PVector_dist.xml )
    *
-   * Calculates the Euclidean distance between two points (considering a point
-   * as a vector object).
+   * Calculates the Euclidean distance between two points (considering a
+   * point as a vector object).
    *
    * ( end auto-generated )
    *
@@ -659,8 +679,9 @@ public class PVector implements Serializable {
     float dx = x - v.x;
     float dy = y - v.y;
     float dz = z - v.z;
-    return (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
+    return (float) Math.sqrt(dx*dx + dy*dy + dz*dz);
   }
+
 
   /**
    * @param v1 any variable of type PVector
@@ -671,8 +692,9 @@ public class PVector implements Serializable {
     float dx = v1.x - v2.x;
     float dy = v1.y - v2.y;
     float dz = v1.z - v2.z;
-    return (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
+    return (float) Math.sqrt(dx*dx + dy*dy + dz*dz);
   }
+
 
   /**
    * ( begin auto-generated from PVector_dot.xml )
@@ -688,8 +710,9 @@ public class PVector implements Serializable {
    * @brief Calculate the dot product of two vectors
    */
   public float dot(PVector v) {
-    return x * v.x + y * v.y + z * v.z;
+    return x*v.x + y*v.y + z*v.z;
   }
+
 
   /**
    * @param x x component of the vector
@@ -697,22 +720,24 @@ public class PVector implements Serializable {
    * @param z z component of the vector
    */
   public float dot(float x, float y, float z) {
-    return this.x * x + this.y * y + this.z * z;
+    return this.x*x + this.y*y + this.z*z;
   }
+
 
   /**
    * @param v1 any variable of type PVector
    * @param v2 any variable of type PVector
    */
   static public float dot(PVector v1, PVector v2) {
-    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+    return v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
   }
+
 
   /**
    * ( begin auto-generated from PVector_cross.xml )
    *
-   * Calculates and returns a vector composed of the cross product between two
-   * vectors.
+   * Calculates and returns a vector composed of the cross product between
+   * two vectors.
    *
    * ( end auto-generated )
    *
@@ -723,6 +748,7 @@ public class PVector implements Serializable {
   public PVector cross(PVector v) {
     return cross(v, null);
   }
+
 
   /**
    * @param v any variable of type PVector
@@ -741,6 +767,7 @@ public class PVector implements Serializable {
     return target;
   }
 
+
   /**
    * @param v1 any variable of type PVector
    * @param v2 any variable of type PVector
@@ -758,6 +785,7 @@ public class PVector implements Serializable {
     }
     return target;
   }
+
 
   /**
    * ( begin auto-generated from PVector_normalize.xml )
@@ -778,6 +806,7 @@ public class PVector implements Serializable {
     return this;
   }
 
+
   /**
    * @param target Set to null to create a new vector
    * @return a new vector (if target was null), or target
@@ -788,18 +817,18 @@ public class PVector implements Serializable {
     }
     float m = mag();
     if (m > 0) {
-      target.set(x / m, y / m, z / m);
+      target.set(x/m, y/m, z/m);
     } else {
       target.set(x, y, z);
     }
     return target;
   }
 
+
   /**
    * ( begin auto-generated from PVector_limit.xml )
    *
-   * Limit the magnitude of this vector to the value used for the <b>max</b>
-   * parameter.
+   * Limit the magnitude of this vector to the value used for the <b>max</b> parameter.
    *
    * ( end auto-generated )
    *
@@ -809,18 +838,18 @@ public class PVector implements Serializable {
    * @brief Limit the magnitude of the vector
    */
   public PVector limit(float max) {
-    if (magSq() > max * max) {
+    if (magSq() > max*max) {
       normalize();
       mult(max);
     }
     return this;
   }
 
+
   /**
    * ( begin auto-generated from PVector_setMag.xml )
    *
-   * Set the magnitude of this vector to the value used for the <b>len</b>
-   * parameter.
+   * Set the magnitude of this vector to the value used for the <b>len</b> parameter.
    *
    * ( end auto-generated )
    *
@@ -835,9 +864,9 @@ public class PVector implements Serializable {
     return this;
   }
 
+
   /**
    * Sets the magnitude of this vector, storing the result in another vector.
-   *
    * @param target Set to null to create a new vector
    * @param len the new length for the new vector
    * @return a new vector (if target was null), or target
@@ -847,6 +876,7 @@ public class PVector implements Serializable {
     target.mult(len);
     return target;
   }
+
 
   /**
    * ( begin auto-generated from PVector_setMag.xml )
@@ -865,10 +895,12 @@ public class PVector implements Serializable {
     return angle;
   }
 
+
   @Deprecated
   public float heading2D() {
     return heading();
   }
+
 
   /**
    * ( begin auto-generated from PVector_rotate.xml )
@@ -885,10 +917,11 @@ public class PVector implements Serializable {
   public PVector rotate(float theta) {
     float temp = x;
     // Might need to check for rounding errors like with angleBetween function?
-    x = x * PApplet.cos(theta) - y * PApplet.sin(theta);
-    y = temp * PApplet.sin(theta) + y * PApplet.cos(theta);
+    x = x*PApplet.cos(theta) - y*PApplet.sin(theta);
+    y = temp*PApplet.sin(theta) + y*PApplet.cos(theta);
     return this;
   }
+
 
   /**
    * ( begin auto-generated from PVector_rotate.xml )
@@ -901,9 +934,7 @@ public class PVector implements Serializable {
    * @usage web_application
    * @brief Linear interpolate the vector to another vector
    * @param v the vector to lerp to
-   * @param amt The amount of interpolation; some value between 0.0 (old vector)
-   * and 1.0 (new vector). 0.1 is very near the old vector; 0.5 is halfway in
-   * between.
+   * @param amt  The amount of interpolation; some value between 0.0 (old vector) and 1.0 (new vector). 0.1 is very near the old vector; 0.5 is halfway in between.
    * @see PApplet#lerp(float, float, float)
    */
   public PVector lerp(PVector v, float amt) {
@@ -913,11 +944,13 @@ public class PVector implements Serializable {
     return this;
   }
 
+
   /**
    * Linear interpolate between two vectors (returns a new PVector object)
-   *
    * @param v1 the vector to start from
    * @param v2 the vector to lerp to
+   * @param amt
+   * @return 
    */
   public static PVector lerp(PVector v1, PVector v2, float amt) {
     PVector v = v1.copy();
@@ -925,12 +958,14 @@ public class PVector implements Serializable {
     return v;
   }
 
+
   /**
    * Linear interpolate the vector to x,y,z values
-   *
    * @param x the x component to lerp to
    * @param y the y component to lerp to
    * @param z the z component to lerp to
+   * @param amt
+   * @return 
    */
   public PVector lerp(float x, float y, float z, float amt) {
     this.x = PApplet.lerp(this.x, x, amt);
@@ -939,13 +974,14 @@ public class PVector implements Serializable {
     return this;
   }
 
+
   /**
    * ( begin auto-generated from PVector_angleBetween.xml )
    *
-   * Calculates and returns the angle (in radians) between two vectors.
+   * Calculates and returns the angle (in radians) between two vectors.( end auto-generated )
    *
-   * ( end auto-generated )
    *
+   * @return 
    * @webref pvector:method
    * @usage web_application
    * @param v1 the x, y, and z components of a PVector
@@ -956,12 +992,8 @@ public class PVector implements Serializable {
 
     // We get NaN if we pass in a zero vector which can cause problems
     // Zero seems like a reasonable angle between a (0,0,0) vector and something else
-    if (v1.x == 0 && v1.y == 0 && v1.z == 0) {
-      return 0.0f;
-    }
-    if (v2.x == 0 && v2.y == 0 && v2.z == 0) {
-      return 0.0f;
-    }
+    if (v1.x == 0 && v1.y == 0 && v1.z == 0 ) return 0.0f;
+    if (v2.x == 0 && v2.y == 0 && v2.z == 0 ) return 0.0f;
 
     double dot = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
     double v1mag = Math.sqrt(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z);
@@ -981,20 +1013,23 @@ public class PVector implements Serializable {
     return (float) Math.acos(amt);
   }
 
+
   @Override
   public String toString() {
     return "[ " + x + ", " + y + ", " + z + " ]";
   }
 
+
   /**
    * ( begin auto-generated from PVector_array.xml )
    *
-   * Return a representation of this vector as a float array. This is only for
-   * temporary use. If used in any other fashion, the contents should be copied
-   * by using the <b>PVector.get()</b> method to copy into your own array.
+   * Return a representation of this vector as a float array.This is only
+ for temporary use. If used in any other fashion, the contents should be
+ copied by using the <b>PVector.get()</b> method to copy into your own array.
    *
    * ( end auto-generated )
    *
+   * @return 
    * @webref pvector:method
    * @usage: web_application
    * @brief Return a representation of the vector as a float array
@@ -1009,6 +1044,7 @@ public class PVector implements Serializable {
     return array;
   }
 
+
   @Override
   public boolean equals(Object obj) {
     if (!(obj instanceof PVector)) {
@@ -1017,6 +1053,7 @@ public class PVector implements Serializable {
     final PVector p = (PVector) obj;
     return x == p.x && y == p.y && z == p.z;
   }
+
 
   @Override
   public int hashCode() {
